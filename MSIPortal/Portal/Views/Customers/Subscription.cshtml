@@ -1,0 +1,186 @@
+﻿@*@model IEnumerable<Portal.Models.Subscriptions>*@
+
+@model IPagedList<Portal.Models.Subscriptions>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Subscription";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">@ViewBag.CustomerName - Subscription</h4>
+    </div>
+</div>
+
+<div class="white-box">
+    @using (Html.BeginForm())
+    {
+
+        <div class="row ToolsHolder">
+            <div class="col-2">
+                @if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                || Portal.Helpers.Sessions.UserTypeID == 1 )
+                {
+                <a href="@Url.Action("Create", "Orders", new { id = ViewBag.CID}, null)" class="btn btn-danger">Add Subscription</a>
+                }
+            </div>
+            <div class="col-3">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+            </div>
+            <div class="col-1 no-padding">
+                <input type="submit" value="Search" class="btn btn-danger" />
+
+            </div>
+        </div>
+    }
+    @*search*@
+
+    <h3 class="box-title m-b-20">License-based subscriptions</h3>
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table CustomTableCursor">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("Subscription ID", "Subscription", new { sortColumn = "subscriptionid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.SubscriptionID)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Offer Name", "Subscription", new { sortColumn = "offername", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.OfferName)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Quantity", "Subscription", new { sortColumn = "quantity", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.Quantity)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Partner ID", "Subscription", new { sortColumn = "partnerid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.PartnerId)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Creation Date", "Subscription", new { sortColumn = "creationdate", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.CreationDate)*@
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(m => m.Offers.UnitType != "Usage-based"))
+                {
+                     <tr onclick="location.href = '@(Url.Action("SubscriptionDetails", "Customers", new { sID = item.SubscriptionID}))'">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubscriptionID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OfferName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity) @Html.DisplayFor(modelItem => item.Offers.UnitType)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PartnerId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                         <td>
+                             @Html.DisplayFor(modelItem => item.Status)
+                         </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <!-- <h3 class="box-title m-b-20 m-t-20">Usage-based subscriptions</h3>
+
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("Subscription ID", "Subscription", new { sortColumn = "subscriptionid", sortOrder1 = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.SubscriptionID)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Offer Name", "Subscription", new { sortColumn = "offername", sortOrder1 = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.OfferName)*@
+                    </th>
+                    <th>
+
+                        @*@Html.DisplayNameFor(model => model.Quantity)*@
+                    </th>
+
+                    <th>
+                        @Html.ActionLink("Partner ID", "Subscription", new { sortColumn = "partnerid", sortOrder1 = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.PartnerId)*@
+                    </th>
+                    <th>
+                        @Html.ActionLink("Creation Date", "Subscription", new { sortColumn = "creationdate", sortOrder1 = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                        @*@Html.DisplayNameFor(model => model.CreationDate)*@
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(m => m.Offers.UnitType == "Usage-based"))
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubscriptionID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OfferName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Offers.UnitType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PartnerId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table> -->
+        <!-- pager -->
+
+        <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+
+        <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+            @Html.PagedListPager(Model, page => Url.Action("Subscription",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(3) a').addClass("active");
+
+    });
+
+</script>

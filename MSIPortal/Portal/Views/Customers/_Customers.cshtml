@@ -1,0 +1,419 @@
+﻿@model Portal.Models.Customers
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Customers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading"> Create</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="form">
+
+                            <h3 class="box-title m-b-0">Company</h3>
+                            @if (ViewBag.Msg != null && ViewBag.Msg != "")
+                            {
+                                <div id="divMsgErr">
+                                    <span class="alert alert-danger" style="display: inline-table; width:100%" id="spMsg">
+                                        @ViewBag.Msg
+                                        <input type="button" name="x" value="x" id="btnX" class="btn btn-danger btn-xs pull-right" />
+
+                                    </span>
+
+                                </div>
+                            }
+                            <input type="text" hidden="hidden" id="txtSpecialQ" />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.CompanyName) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.DomainName) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.DomainName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DomainName, "", new { @class = "text-danger" })
+                                    <span id="errMsg" class="text-danger"></span>
+                                    <div id="divRequest" style="display:none;">
+                                        <input type="button" id="requestRel" class="requestRel btn btn-inverse btn-sm" value="Request reseller relationship" />
+                                    </div>
+                                    <div id="divAvail" style="display:none;"><i class="fa fa-check"></i> available</div>
+                                    <div id="divChecking" style="display:none;"><i class="fa fa-spinner"></i> checking domain...</div>
+
+                                </div>
+                                <div class="col-2 no-padding">
+                                    <p class="form-control-static">.onmicrosoft.com</p>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.AddressLine1) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.AddressLine1, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AddressLine1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.AddressLine2)</label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.AddressLine2, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AddressLine2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.City) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.State)</label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.ZipPostal) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.ZipPostal, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ZipPostal, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.SpecialQualificationsID, htmlAttributes: new { @class = "control-label col-md-2" })</label>
+                                <div class="col-5">
+                                    @Html.DropDownList("SpecialQualificationsID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.SpecialQualificationsID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <h3 class="box-title m-b-0">Primary Contact</h3>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.FirstName) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.LastName) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.EmailAddress) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.PhoneNumber) <span>*</span></label>
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control numeric" } })
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">@Html.LabelFor(model => model.AgreementDate) <span>*</span></label>
+                                <div class="col-5">
+                                    @*<input type="date" class="form-control" />*@
+                                    @Html.TextBoxFor(model => model.AgreementDate, new { @type = "date", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.AgreementDate, "", new { @class = "text-danger" })
+                                    @*@Html.TextBoxFor(model => model.AgreementDate, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.AgreementDate, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+
+
+                            @if (Portal.Helpers.Sessions.UserTypeID == 1)
+                            {
+                                <h3 class="box-title m-b-0">Indirect reseller info</h3>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">@Html.LabelFor(model => model.IndirectResellerID)</label>
+                                    <div class="col-5">
+                                        @Html.DropDownList("IndirectResellerID", null, "Select indirect reseller", htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.IndirectResellerID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">&nbsp;</label>
+                                <div class="col-5">
+                                    @Html.CheckBoxFor(model => model.AgreedToMCA)
+                                    @Html.DisplayName("I agree to the")
+                                    @Html.ValidationMessageFor(model => model.AgreedToMCA, "", new { @class = "text-danger" })
+                                    <a style="color:dodgerblue" href="https://docs.microsoft.com/en-us/partner-center/agreements">Microsoft Cloud Agreement</a>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group m-b-0">
+                                <div class="offset-sm-2 col-sm-9">
+                                    <input type="submit" value="Create" class="btn btn-danger" id="btnCreate" />
+                                    <input type="submit" value="Create" class="btn btn-danger hidden" id="btnChange" />
+                                    <input type="button" value="Next: Subscription" class="btn btn-inverse" id="btnSubscription" />
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div id="modal-apply" class="modal fade" role="dialog">
+    <div class="modal-dialog media-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Request a partnership</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divRequestRel">
+
+
+                    <div class="form-horizontal">
+                            @Html.Partial("_RequestPartnership")
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-inverse" type="button" value="Cancel" id="btnCancel" data-dismiss="modal" />
+            </div><div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+   
+    jQuery('.numeric').keyup(function () {
+
+        var charCode = (this.which) ? this.which : event.keyCode
+        if (charCode != 16) {
+            this.value = this.value.replace(/[^0-9+\.]/g, '');
+        }
+        else {
+            this.value = this.value.replace(/\=/g, '+');
+            this.value = this.value.replace(/\++/g, '+');
+
+        }
+    });
+
+    $('#SpecialQualificationsID').change(function (x) {
+        if ($(this).val() == 2) {
+            
+            $.ajax({
+                url: "/Customers/getSpecialQua",
+                type: "POST",
+                data: {},
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+
+                }
+            });
+            $('#btnChange').click()
+            //alert('a');
+           
+        }// Get Special Qualification If Education
+
+    });
+
+    if ($('#DomainName').val() != "") {
+        CheckDomain();
+    }
+    $('#DomainName').keypress(function (e) {
+
+        $("#errMsg").text("");
+
+        var regex = new RegExp("^[a-zA-Z0-9]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+
+            return true;
+        }
+
+        e.preventDefault();
+        $("#errMsg").text("Domain names can only contain letters and numbers; no hyphens, periods, or underscores.");
+
+        return false;
+    });
+
+    //CHECK DOMAIN AVAILABILITY
+    $('#DomainName').change(function (e) {
+
+        CheckDomain();
+
+    });
+
+
+    function CheckDomain() {
+        var name = $('#DomainName').val();
+
+        if (name == '') {
+            //$(".preload").hide();
+            $("#divChecking").attr("style", "display:none;");
+            $("#errMsg").text("");
+            $("#divRequest").attr("style", "display:none;");
+            $("#divAvail").attr("style", "display:none;");
+
+            return;
+        }
+
+        $("#divChecking").attr("style", "display:block;");
+        $("#errMsg").text("");
+        $("#divRequest").attr("style", "display:none;");
+        $("#divAvail").attr("style", "display:none;");
+
+        var regex = new RegExp("^[a-zA-Z0-9]+$");
+        if (regex.test(name)) {
+            //CHECK FOR DOMAIN
+            $.ajax({
+                url: '/Customers/CheckDomain',
+                data: { domainName: name },
+                contentType: 'application/html ; charset:utf-8',
+                type: 'GET',
+                dataType: 'html'
+            }).success(function (data) {
+                var data1 = $.parseJSON(data);
+                $("#divChecking").attr("style", "display:none;");
+
+                //alert(data1);
+                if (data1 == "false") {
+                    $("#errMsg").text(name + " .onmicrosoft.com is not available.");
+                    $("#divRequest").attr("style", "display:block;");
+                    $("#divAvail").attr("style", "display:none;");
+                    $("#errMsg").attr("style", "display:block;");
+
+                }
+                else {
+                    $("#errMsg").text("available");
+                    $("#errMsg").attr("style", "display:none;");
+                    $("#divRequest").attr("style", "display:none;");
+                    $("#divAvail").attr("style", "display:block;");
+
+                }
+
+                //$("#ShippingDetails_WeightCharge").prop("value", data1);
+                //$("#txtWeightCharge").prop("value", data1);
+                //$(".preload").hide();
+
+            }).error(function () {
+                //$(".preload").hide();
+                $("#divChecking").attr("style", "display:none;");
+                $("#errMsg").text("error in checking domain.");
+                $("#divRequest").attr("style", "display:none;");
+                $("#divAvail").attr("style", "display:none;");
+            });
+            //END CHECK FOR DOMAIN
+        }//test passed on alphanumeric
+        else
+        {
+          
+            $("#errMsg").text("Domain names can only contain letters and numbers; no hyphens, periods, or underscores.");
+            return;
+        }
+    }
+
+    $('.requestRel').click(function (e) {
+        e.preventDefault();
+        //alert('test');
+
+        $('#divRequestRel').attr("style", "display:block;");
+
+        $('body').css('overflow', 'hidden');
+        $('#requestRel').attr("data-toggle", "modal");
+        $('#requestRel').attr("data-target", "#modal-apply");
+    });
+
+    $(document).ready(function () {
+        $('#btnCancel').click(function () {
+            $('body').css('overflow', 'auto');
+        });
+    });
+  
+</script>
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+       // $('#side-menu li:nth-child(4) a').addClass("active");
+        $("#btnX").click(function ()
+        {
+            $("#spMsg").attr('style', 'display:none;');
+            $("#divMsgErr").attr('style', 'display:none;');
+            ViewBag.Msg = '';
+            
+        });
+    });
+
+</script>
+
+<style>
+    .modal {
+        top: 10%;
+    }
+
+    .modal .modal-dialog {
+        max-width: 800px;
+        margin: 0px auto 0px auto;
+    }
+
+    .modal .modal-dialog textarea.form-control{
+    height:280px;
+    }
+</style>

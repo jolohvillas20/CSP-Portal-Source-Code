@@ -1,0 +1,322 @@
+﻿@*@model IEnumerable<Portal.Models.Class.clsReviewOrder>*@
+
+@{
+    ViewBag.Title = "Review Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Review your orders</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:90%">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="btnCloseModal1" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Transaction Failed</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvErrorList">
+
+                </div>
+                @*<p>Some text in the modal.</p>*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCloseModal" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="white-box" style="width:100%;">
+        <div class="col-md-12">
+            <label>Verify that your orders are correct and then select Buy. To make changes, select your browser's Back button to return to the previous page.</label>
+           
+            <div>
+                <table style="width:100%;margin-top:20px;" id="tblReviewOrder">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in (ViewData["ReviewOrders"] as List<Portal.Models.Class.clsReviewOrder>))
+                        {
+                            <tr >
+                                <td style="padding:10px;">
+                                    <table>
+                                        <tr>
+                                            <td id="tdOfferName"><label style="font-size:16px;font-weight:700">@item.OfferName</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label style="font-size:11px;"> @item.OfferShortInfo </label><br /><label style="font-size:11px;">@item.OfferId</label></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td id="tdQuantity" style="padding:10px;vertical-align:top">@Html.TextBoxFor(m => item.Quantity, new { style = "width:50px;text-align: right;padding-right: 5px;" })</td>
+                                <td style="padding:10px;vertical-align:top"><a href="#">Remove</a></td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #808080">
+                                <td style="padding-left:30px;padding-bottom:20px">
+                                    <table id="tblBillingFrequency">
+                                        <tr>
+                                            <td>
+                                                <div id="dvParentWait">
+                                                 
+                                                </div>
+                                                
+                                                <div id="dvBillingFrequency">
+                                                    <label>Billing Frequency</label><br />
+                                                    <select id="dropdownBF">
+                                                        <option value="volvo">Annual</option>
+                                                        <option value="saab">Monthly</option>
+                                                    </select>
+                                                </div>
+                                               
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td id="tdOfferId" ><label id="lblOfferId" style="display:none" >@item.OfferId</label><label id="lblOfferName" style="display:none">@item.OfferName</label><label id="lblPrice" style="display:none">@item.Price</label></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+           
+        </div>
+
+        <div class="col-md-12" style="margin-top:10px;">
+            <table>
+                <tr>
+                    <td> <input type="submit" value="Buy" class="btn btn-danger" id="btnBuy" /></td>
+                    <td style="padding-left:5px" > <input type="button" value="Cancel" class="btn btn-inverse" id="btnCancel" /></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+@*<div class="row">
+    
+</div>*@
+
+    <script>
+
+        var GetBillingFrequencyLink = '@Url.Action("GetBillingCycle", "Orders")';
+        var SaveOrderLink = '@Url.Action("SaveOrder", "Orders")';
+        var MicrosoftId = @ViewData["r_MicrosoftId"].ToString();
+        var IndirectResellerId = @ViewData["r_IndirectResellerId"].ToString();
+
+        $(document).ready(function () {
+            //sidebar highlight
+            $('#side-menu li:nth-child(4) a').addClass("active");
+            CheckBillingFrequency();
+            GroupTheOrder();
+
+            $('#btnCloseModal').click(function () {
+                document.getElementById("myModal").setAttribute("class", "modal fade");
+                document.getElementById("myModal").style.display = "none";
+                window.location.href = "/Orders/OrderConfirmation/"
+            });
+
+            $('#btnCloseModal1').click(function () {
+                document.getElementById("myModal").setAttribute("class", "modal fade");
+                document.getElementById("myModal").style.display = "none";
+                window.location.href = "/Orders/OrderConfirmation/"
+            });
+
+            
+
+
+        });
+
+        function GroupTheOrder() {
+            $('#btnBuy').click(function () {
+
+                $(".preload").show();
+
+                var CustomerSubscription = new Object();
+                var lOrder = new Array();
+                var lineQuantity = 0;
+                var TotalPrice = 0;
+                var TotalVat = 0;
+                var TotalAmount = 0;
+
+                $('#tblReviewOrder tr').each(function (i, row) {
+
+                    var strOfferId = $(this).find('#tdOfferId').find("#lblOfferId");
+                    var strOfferName = $(this).find('#tdOfferId').find("#lblOfferName");
+                    var strPrice = $(this).find('#tdOfferId').find("#lblPrice");
+                    var strQuantity = $(this).find('#tdQuantity').find('input');
+                    //var strOfferName = $(this).find('td').find('table').find('tr').find('#tdOfferName');
+                    var strBillingFrequency = $(this).find('td').find('table').find('tr').find('td').find('#dvBillingFrequency').find('#dropdownBF');
+
+                    if (typeof strQuantity.val() !== 'undefined') {
+                        lineQuantity = strQuantity.val();
+                    }
+
+
+                    if (strOfferId.eq(0).text() !== "") {
+                        var custom = new Object();
+                        custom.OfferId = strOfferId.eq(0).text();
+                        custom.LicenseCount = lineQuantity;
+                        custom.Price = strPrice.eq(0).text();
+                        custom.BillingFrequency = strBillingFrequency.val();
+
+                        var price = parseFloat(RemoveCommas(strPrice.eq(0).text())) * parseFloat(lineQuantity)
+                       
+
+                        TotalPrice += price;
+
+                        lOrder.push(custom);
+                    }
+
+                   
+                });
+
+                TotalVat = parseFloat((TotalPrice) * .12);
+                TotalAmount = TotalPrice + TotalVat;
+
+                CustomerSubscription.MicrosoftID = MicrosoftId;
+                CustomerSubscription.CustomerSubscriptions = lOrder;
+                CustomerSubscription.IndirectResellerID = IndirectResellerId;
+                CustomerSubscription.TotalPrice = TotalPrice;
+                CustomerSubscription.TotalVat = TotalVat;
+                CustomerSubscription.TotalAmount = TotalAmount;
+
+                console.log(CustomerSubscription);
+
+                //Call Confirmation View
+
+                $.ajax({
+                    traditional: true,
+                    type: 'post',
+                    datatype: 'json',
+                    data: JSON.stringify(CustomerSubscription),
+                    url: SaveOrderLink,
+                    cache: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (request) {
+                        console.log(request);
+
+                        if (request == "1") {
+                            window.location.href = "/Orders/OrderConfirmation/";
+                        } else {
+                            $("#dvErrorList").empty();
+
+                            for (var i = 0; i < request.length; i++) {
+                                $("#dvErrorList").append("<label style='color:red'>" + "• " + request[i].toString() + "</label>" + "</br></br>");
+                            }
+
+                            document.getElementById("myModal").setAttribute("class", "modal fade show");
+                            document.getElementById("myModal").style.display = "block";
+                            document.getElementById("myModal").style.backgroundColor = "rgba(0, 0, 0,0.5)";
+
+                            $(".preload").hide();
+                        }
+
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    },
+                    complete: function (e) {
+                        console.log(e);
+                    }
+                });
+
+            });
+        }
+
+        function CheckBillingFrequency() {
+
+            
+            var iCount = 0;
+
+
+            $('#tblReviewOrder tr').each(function (i, row) {
+                var $tds = $(this).find('td'),
+                    billingFrequencyControl = $tds.find('#tblBillingFrequency').find('tr').find('td').find('#dvBillingFrequency').find('#dropdownBF');
+                var strOfferId = $(this).find('#lblOfferId');
+
+                var dvWaitParent = $tds.find('#tblBillingFrequency').find('tr').find('td').find('#dvParentWait');
+                var dvBillingFrequency = $tds.find('#tblBillingFrequency').find('tr').find('td').find('#dvBillingFrequency');
+
+                billingFrequencyControl.empty();
+                dvBillingFrequency.hide();
+
+                var strImgLoadingId = "img_loading" + iCount.toString();
+               
+                dvWaitParent.append("<img src='/Content/loadingpage.gif' id='" + strImgLoadingId + "' width='64' height='64' />");
+
+                if (strOfferId.eq(0).text() !== "") {
+                    
+                    $("#" + strImgLoadingId).show();
+
+                    $.ajax({
+                        traditional: true,
+                        type: 'post',
+                        datatype: 'html',
+                        data: { OfferID: strOfferId.eq(0).text() },
+                        url: GetBillingFrequencyLink,
+                        cache: true,
+                        success: function (request) {
+
+                            var obj = jQuery.parseJSON(request);
+
+                            var i;
+
+                            for (i = 0; i < obj.length; i++) {
+                                var strBillingFrequencyName = obj[i].billingFrequency;
+                                billingFrequencyControl.append(" <option value=" + strBillingFrequencyName + ">" + strBillingFrequencyName + "</option>");
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                            $("#" + strImgLoadingId).hide();
+                        },
+                        complete: function (e) {
+                            $("#" + strImgLoadingId).hide();
+                            dvBillingFrequency.show();
+
+                        }
+                    });
+                    iCount = iCount + 1;
+                }
+
+
+            });
+
+            
+
+            
+        }
+
+        function FormatNumber(x) {
+            x = parseFloat(x).toFixed(2);
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function RemoveCommas(objName) {
+            var lstLetters = objName;
+            var lstReplace = lstLetters.replace(/\,/g, '');
+
+            return lstReplace;
+        }
+    </script>
+

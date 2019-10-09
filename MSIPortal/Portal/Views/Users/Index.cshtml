@@ -1,0 +1,143 @@
+﻿@*@model IEnumerable<Portal.Models.Users>*@
+@model IPagedList<Portal.Models.Users>
+@using PagedList.Mvc;
+@using PagedList;
+
+    @{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">Users</h4>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <div class="white-box">
+        @using (Html.BeginForm())
+        {
+            <div class="row ToolsHolder">
+                <div class="col-3">
+                    <a href="@Url.Action("Create")" class="btn btn-danger">Create New</a>
+                </div>
+
+               <div class="col-3 ">
+                    @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+                </div>
+
+                <div class="col-1 no-padding">
+                    <input type="submit" value="Search" class="btn btn-danger" />
+                </div>
+            </div>
+        }
+       
+
+        <div class="table-responsive">
+            <table class="table color-bordered-table inverse-bordered-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.ActionLink("Lastname", "Index", new { sortColumn = "lastname", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.LastName)*@
+                        </th>
+                        <th>
+                            @Html.ActionLink("Firstname", "Index", new { sortColumn = "firstname", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.FirstName)*@
+                        </th>
+                        <th>
+                            @Html.ActionLink("Email", "Index", new { sortColumn = "email", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.Email)*@
+                        </th>
+                        <th>
+                            @Html.ActionLink("Username", "Index", new { sortColumn = "username", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.username)*@
+                        </th>
+                        <th>
+                            @Html.ActionLink("User Type", "Index", new { sortColumn = "usertypeid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.UserTypes.UserType)*@
+                        </th>
+                        <th>
+                            @Html.ActionLink("Status", "Index", new { sortColumn = "active", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                            @*@Html.DisplayNameFor(model => model.Active)*@ 
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserTypes.UserType)
+                        </td>
+                        <td>
+                            @if (item.Active == false)
+                            {
+                            @Html.Raw("Inactive");
+                            }
+                            else
+                            {
+                            @Html.Raw("Active");
+                            }
+                        </td>
+                        <td class="text-center">
+
+                            <a href="@Url.Action("Edit", new { id=item.ID })" data-toggle="tooltip" data-original-title="Edit" class="btn btn-success btn-xs btn-1f">
+                                <i class="fa fa-edit"></i>
+                            </a>
+
+                            <a href="@Url.Action("Details", new { id=item.ID })" data-toggle="tooltip" data-original-title="Details" class="btn btn-primary btn-xs btn-1f">
+                                <i class="fa fa-list"></i>
+                            </a>
+
+                            <a href="@Url.Action("Delete", new { id=item.ID })" data-toggle="tooltip" data-original-title="Delete" class="btn btn-danger btn-xs btn-1f">
+                                <i class="fa fa-remove"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- pager -->
+            @if (Model != null)
+            {
+                <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </div>
+
+                <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+                    @Html.PagedListPager(Model, page => Url.Action("Index",
+                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                </div>
+            }
+
+        </div>
+        </div>
+
+
+        <script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(1) a').addClass("active");
+
+    });
+
+        </script>

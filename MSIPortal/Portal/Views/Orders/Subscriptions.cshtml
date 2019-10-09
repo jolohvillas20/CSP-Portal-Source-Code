@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Microsoft.Store.PartnerCenter.Models.Subscriptions.Subscription>
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+
+<p>
+@if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                              || Portal.Helpers.Sessions.UserTypeID == 1)
+{
+    @Html.ActionLink("Create Order", "Create")
+}
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Subscription")
+        </th>
+        <th>
+            @Html.DisplayName("Offer")
+        </th>
+        <th>
+            @Html.DisplayName("Quantity")
+        </th>
+        <th>
+            @Html.DisplayName("Billing Cycle")
+        </th>
+        <th>
+            @Html.DisplayName("Reseller")
+        </th>
+        <th>@Html.DisplayName("Date Created")</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.OfferName)</td>
+        <td>@Html.DisplayFor(modelItem => item.FriendlyName)</td>
+        <td>@Html.DisplayFor(modelItem => item.Quantity) @Html.DisplayFor(modelItem => item.UnitType)</td>
+        <td>@Html.DisplayFor(modelItem => item.BillingCycle)</td>
+        <td>@Html.DisplayFor(modelItem => item.PartnerId)</td>
+        <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+    </tr>
+}
+
+</table>

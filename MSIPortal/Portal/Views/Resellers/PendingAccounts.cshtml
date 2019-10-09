@@ -1,0 +1,268 @@
+﻿@*@model IEnumerable<Portal.Models.Resellers>*@
+@model IPagedList<Portal.Models.Resellers>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Reseller";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Accounts for Approval</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="white-box">
+    @*<h3 class="box-title">&nbsp;</h3>*@
+    @TempData["Error"]
+
+    @using (Html.BeginForm())
+    {
+        <div class="row ToolsHolder">
+            <div class="col-3 offset-sm-8">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+            </div>
+            <div class="col-1 no-padding">
+                <input type="submit" value="Search" class="btn btn-danger" />
+            </div>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("MPN ID", "PendingAccounts", new { sortColumn = "mpnid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Reseller Name", "PendingAccounts", new { sortColumn = "resellername", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Emails", "PendingAccounts", new { sortColumn = "emails", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Date Registered", "PendingAccounts", new { sortColumn = "dateregistered", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Users.username)
+                        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="item-row">
+                        <td>
+                            <label class="resellerid" hidden="hidden">
+                                @Html.DisplayFor(modelItem => item.ResellerID)
+                            </label>
+                            <label class="mpnid">
+                                @Html.DisplayFor(modelItem => item.MPNID)
+                             </label>
+                        </td>
+                        <td>
+                            <label class="resellername">
+                                @Html.DisplayFor(modelItem => item.ResellerName)
+                             </label>
+                        </td>
+                        <td>
+                            <label class="email">
+                                @Html.DisplayFor(modelItem => item.Emails)
+                            </label>
+                        </td>
+                        <td>
+                          @Html.DisplayFor(modelItem => item.DateRegistered)
+                        </td>
+                        <td class="text-center">
+                            <input type="button" data-toggle="tooltip" data-original-title="Approve" class="btn btn-success btn-xs btn-1f approve" value="Approve" />
+                            @*<a href="#"  data-toggle="tooltip" data-original-title="Edit" class="btn btn-success btn-xs btn-1f approve">
+                                Approve
+                            </a>*@                    
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- pager -->
+
+        <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+
+        <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+<div id="divApproval" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Please check details</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="TableHolder">
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("MPN ID")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("ResellerName")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Email/s")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Vat Exempted")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="approval-items">
+                                <td>
+                                    <label class="resellerid" hidden="hidden">
+                                    </label>
+                                    <label class="mpnid"> </label>
+                                </td>
+                                <td>
+                                    <label class="resellername"></label>
+                                </td>
+                                <td>
+                                    <label class="email"></label>
+                                </td>
+                                <td>
+                                    <input class="check-box" type="checkbox">
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn-yes btn btn-danger">Approve</button>
+                <button type="button" id="close-notif" class="btn btn-inverse" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(2) a').addClass("active");
+
+    });
+
+    $(function () {
+        $('.approve').click(function () {
+            $('#hide').show();
+            $row = $(this).closest('tr.item-row');
+
+            $ResellerID = $row.find('.resellerid').text();
+            $MPNID = $row.find('.mpnid').text();
+            $ResellerName = $row.find('.resellername').text();
+            $Emails = $row.find('.email').text();
+       
+    
+            $("#divApproval tr.approval-items").each(function () {
+                $this = $(this);
+
+                $this.find('.resellerid').html($ResellerID.toString());
+                $this.find('.mpnid').html($MPNID.toString());
+                $this.find('.resellername').html($ResellerName.toString());
+                $this.find('.email').html($Emails.toString());
+            });
+
+            $("#divApproval").modal();
+
+        });
+    }); //ddl-status freight
+
+    $(".btn-yes").unbind().click(function (e) {
+
+        var reseller = new Object();
+
+        $row = $('tr').closest('.approval-items');
+
+        $ResellerID = $row.find('.resellerid').text();
+        $CheckBox = $row.find('.check-box');
+
+
+        if ($CheckBox.prop('checked') == true) {
+            reseller.ResellerID = $ResellerID;
+            reseller.IsVatExempted = true;
+        }
+        else if ($CheckBox.prop('checked') == false) {
+            reseller.ResellerID = $ResellerID;
+            reseller.IsVatExempted = false;
+        }
+
+        $(".preload").show();
+        $.ajax({
+            url: "/Resellers/Approve",
+            type: "POST",
+            data: JSON.stringify(reseller),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+
+                var msg = r;
+
+                if (msg == "okay") {
+                    alert("Successfully Approved");
+                    $(".preload").hide();
+                    $('#close-notif').click();
+                    $(".preload").show();
+                    location.reload();
+                }
+                else { alert(msg); }
+
+            },
+            error: function (xhr, acc, errorThrown) {
+                alert(errorThrown.toString());
+                $('#img').hide(); //<----here
+
+
+            }
+        });
+
+    }); // approve account of reseller
+
+</script>
+
+
+<style>
+    .modal{
+        top:15%;
+    }
+
+    .modal .modal-dialog{
+        max-width:800px;
+        margin:100px auto;
+    }
+</style>

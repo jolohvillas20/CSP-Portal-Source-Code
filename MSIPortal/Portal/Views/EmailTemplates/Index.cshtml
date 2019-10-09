@@ -1,0 +1,231 @@
+﻿@model Portal.Models.EmailTemplates
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+
+@*@using (Html.BeginForm())
+    {*@
+@*@Html.AntiForgeryToken()*@
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Email Template</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading"> &nbsp;</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.EmailType, htmlAttributes: new { @class = "col-2 col-form-label" })
+                            <div class="col-5">
+                                @Html.DropDownListFor(model => model.EmailType,
+                                new SelectList(ViewBag.EmailTemplate,
+                               "Value", "Text"), "Select email template", new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.EmailType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div id="divEmail" style="display:none;">
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.EmailSubject, htmlAttributes: new { @class = "col-2 col-form-label" })
+                                <div class="col-5">
+                                    @Html.EditorFor(model => model.EmailSubject, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EmailSubject, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.EmailContent, htmlAttributes: new { @class = "col-2 col-form-label" })
+                                <div class="col-10">
+                                    @Html.TextAreaFor(model => model.EmailContent, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EmailContent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.EmailVariables, htmlAttributes: new { @class = "col-2 col-form-label" })
+                                <div class="col-10">
+                                    @Html.TextAreaFor(model => model.EmailVariables, new { @class = "form-control", @disabled = "disabled", @rows = "5"})
+                                    @Html.ValidationMessageFor(model => model.EmailVariables, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+
+                            <div id="divDetails" style="display:none;">
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.DetailsContent, htmlAttributes: new { @class = "col-2 col-form-label" })
+                                    <div class="col-10">
+                                        @Html.TextAreaFor(model => model.DetailsContent, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.DetailsContent, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.DetailsVariables, htmlAttributes: new { @class = "col-2 col-form-label" })
+                                    <div class="col-10">
+                                        @Html.TextAreaFor(model => model.DetailsVariables, new { @class = "form-control", @disabled = "disabled", @rows = "5" })
+                                        @Html.ValidationMessageFor(model => model.DetailsVariables, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <div class="offset-sm-2 col-sm-9">
+                                    <input type="submit" value="Save" class="btn btn-danger" id="btnSubmit" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+<div class="form-horizontal">
+    <h4></h4>
+    <hr />
+    
+</div>
+
+@*}*@
+
+
+<script>
+
+    CKEDITOR.replace("EmailContent");
+    CKEDITOR.replace("DetailsContent");
+
+</script>
+
+<script>
+    $("#EmailType").change(function e() {
+        var emailTypeID = $('#EmailType :selected').val();
+        $("#divEmail").attr("style", "display:none;");
+        $("#divDetails").attr("style", "display:none;");
+
+        
+        if (emailTypeID != "") {
+            $("#divEmail").attr("style", "display:block;");
+
+            if ($('#EmailType :selected').text() == "Successful Order")
+            {
+                $("#divDetails").attr("style", "display:block;");
+            }
+        }
+        $('#img').show(); //<----here
+
+        $.ajax({
+            url: "/EmailTemplates/GetEmailContent",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ id: emailTypeID }),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+                //alert(r);
+                $('#img').hide(); //<----here
+                CKEDITOR.instances["EmailContent"].setData(r.EmailContent);
+                $("#EmailSubject").val(r.EmailSubject);
+                $("#EmailVariables").val(r.EmailVariables);
+
+                CKEDITOR.instances["DetailsContent"].setData(r.DetailsContent);
+                $("#DetailsVariables").val(r.DetailsVariables);
+
+            },
+            error: function (xhr, acc, errorThrown) {
+                $('#img').hide(); //<----here
+                CKEDITOR.instances["EmailContent"].setData("");
+                $("#EmailSubject").val("");
+                $("#EmailVariables").val("");
+
+                CKEDITOR.instances["DetailsContent"].setData("");
+                $("#DetailsVariables").val("");
+            }
+        });
+
+    });
+
+
+    $('#btnSubmit').click(function (e) {
+        e.preventDefault();
+        $('#errMsgSub').attr("style", "display:none;");
+        var emailTypeID = $('#EmailType :selected').val();
+        var emailType = $('#EmailType :selected').text();
+
+        //SAVE
+        var editor_data = CKEDITOR.instances['EmailContent'].getData();
+        var editor_data1 = CKEDITOR.instances['DetailsContent'].getData();
+
+        var custom = new Object();
+        custom.ID = emailTypeID;
+        custom.EmailType = emailType;
+        custom.EmailContent = editor_data;
+        custom.EmailSubject = $('#EmailSubject').val();
+        custom.EmailVariables = $('#EmailVariables').val();
+        custom.DetailsContent = editor_data1;
+        custom.DetailsVariables = $('#DetailsVariables').val();
+
+
+        $('#img').show(); //<----here
+        $('#btnSubmit').attr('disabled', 'disabled');
+        $('#btnSubmit').attr("value", "Please wait..");
+
+
+        $.ajax({
+            url: "/EmailTemplates/SaveEmail",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(custom),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+                $('#img').hide(); //<----here
+                $('#btnSubmit').prop('disabled', false);
+                $('#btnSubmit').attr("value", "Submit");
+
+
+                if (r == '0') {
+                    alert('Failed to save email template.');
+                    $('#EmailSubject').focus();
+                }
+                else {
+                    alert('Saved email template.');
+                    $('#EmailSubject').focus();
+                }
+            },
+            error: function (xhr, acc, errorThrown) {
+                alert('Failed to save email template.');
+                $('#img').hide(); //<----here
+                $('#btnSubmit').prop('disabled', false);
+                $('#btnSubmit').attr("value", "Submit");
+
+            }
+        });
+
+    });
+</script>

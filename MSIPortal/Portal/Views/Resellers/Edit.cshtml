@@ -1,0 +1,768 @@
+﻿@model Portal.Models.ResellerAccount
+
+@{
+                /**/
+
+                ViewBag.Title = "Edit";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Resellers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">Edit</div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="form">
+
+
+                            <div id="divErr" style="display:none;">
+                                <label id="lblMsg" class="alert alert-danger"></label>
+                            </div>
+
+                            <input type="text" id="txtResellerID" value="@Model.Reseller.ResellerID" hidden="hidden" />
+
+                            @*@if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                                {
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">User Type</label>
+                                    <div class="col-5">
+                                        <div class="form-check has-success">
+                                            <label class="form-check-label">
+                                                @Html.DropDownList("UserTypeID", new List<SelectListItem>
+                                                {
+                                                new SelectListItem{ Text="Admin", Value = "1" },
+                                               new SelectListItem{ Text="Sales AE", Value = "2" },
+                                                new SelectListItem{ Text="PA", Value = "3" },
+                                                new SelectListItem{ Text="PM", Value = "4" }
+                                                 }, new { @class = "form-control" })
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                }*@
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">MPN ID</label>
+                                <div class="col-5">
+                                    <input type="text" id="txtResellerMPNID" value="@Model.Reseller.MPNID" class="form-control" placeholder="mpnid" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="divCheckingMPN" style="display:none;">
+                                <div class="col-7">
+                                    <i class="fa fa-spinner"></i> checking mpn...
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row" id="divMPNNotExists" style="display:none;">
+                                <div class="col-7">
+                                    No record found.
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row" id="divMPNVerified" style="display:none;">
+                                <div class="col-7">
+                                    <i class="fa fa-check"></i> MPN ID verified.
+                                </div>
+                                <h5>@Html.Label(Model.Reseller.MPNID.ToString(), new { id = "lblMPNResellerName" }) </h5>
+
+
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Reseller Name</label>
+                                <div class="col-5">
+                                    <input type="text" id="txtResellerName" value="@Model.Reseller.ResellerName" class="form-control" placeholder="reseller name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Username</label>
+                                <div class="col-5">
+                                    <input type="text" id="txtUserName" value="@Model.User.username" class="form-control" placeholder="username" />
+                                    <label id="lblPassword" hidden="hidden">@Model.User.password</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Emails</label>
+                                <div class="col-5">
+                                    @*<div id="tags">*@
+                                    <input type="text" id="txtResellerEmail" value="@Model.Reseller.Emails" class="form-control" placeholder="Email" />
+                                    @*<input type="text" id="hidden-txtResellerEmail" hidden="hidden" />*@
+                                    @*</div>*@
+                                    @*<span class="help-block">* kindly seperate by comma (,)</span>*@
+                                </div>
+                            </div>
+
+                            @if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                            {
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Seller ID</label>
+                                    <div class="col-5">
+                                        @*<div id="tags">*@
+                                        <input type="text" id="txtSellerID" value="@Model.Reseller.SellerID" class="form-control" placeholder="Seller ID" />
+                                        @*<input type="text" id="hidden-txtResellerEmail" hidden="hidden" />*@
+                                        @*</div>*@
+                                        @*<span class="help-block">* kindly seperate by comma (,)</span>*@
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Password</label>
+                                    <div class="col-5">
+                                        <input ID="btnGeneratePassword" type="submit" value="Generate Password" class="btn btn-primary btn-xs" />
+
+                                        <div id='PassWordGenerated'>
+                                            A new password has been generated. Do you want to send or cancel?
+                                            <br />
+                                            <input type="button" id="btnSend" class="btn btn-primary btn-xs" value="Save" style="padding:6px 8px;" />
+                                            <a href="@Url.Action("Index")" class="btn btn-inverse btn-xs">Cancel</a>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Reseller Status</label>
+                                    <div class="col-5">
+                                        <div class="form-check has-success">
+                                            <label class="form-check-label">
+                                                @Html.DropDownList("ResellerStatus", new List<SelectListItem>
+                                                {
+                                                new SelectListItem{ Text="Inactive", Value = "0" },
+                                                new SelectListItem{ Text="Active", Value = "1" },
+                                                new SelectListItem{ Text="OnHold", Value = "2" }
+                                                 }, new { @class = "form-control" })
+                                                @if (Model.Reseller.ResellerStatus == 1)
+                                                {<label id="lblStat" hidden="hidden">1</label>}
+                                                else if (Model.Reseller.ResellerStatus == 0)
+                                                {<label id="lblStat" hidden="hidden">0</label> }
+                                                else
+                                                {<label id="lblStat" hidden="hidden">2</label>                    }
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">VAT Exempted</label>
+                                    <div class="col-5">
+                                        @if (Model.Reseller.IsVatExempted == true)
+                                        {
+                                            <input class="check-box" type="checkbox" checked="checked">
+                                        }
+                                        else
+                                        {
+                                            <input class="check-box" type="checkbox">
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+
+
+
+                            <div id='divAuthorizedRep'>
+
+                                <div class="form-group row">
+                                    @*<label class="col-2 col-form-label">Company Name</label>*@
+                                    <div class="col-5">
+                                        <input type="text" id="txtCompanyName" value="@Model.Reseller.CompanyName" class="form-control" placeholder="company name" hidden="hidden" />
+                                    </div>
+                                </div>
+
+
+                                <h3 class="box-title m-b-20">Primary Contact</h3>
+                                @* Authorized Representative *@
+
+                                @if (Portal.Helpers.Sessions.UserType.ToString() == "Reseller")
+                                {
+
+                                    if (ViewBag.AllowEdit == 0)
+                                    {
+                                        <div class="row">
+                                            <div class="col-5 offset-2">
+                                                <input type="button" id="Request" value="Request to Edit" class="btn btn-inverse btn-sm" />
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                }
+                                @if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                                {
+
+                                    <div class="form-group row">
+                                        <label class="col-2 col-form-label">Allow Edit</label>
+                                        <div class="col-5">
+                                            <input type="checkbox" id="Approve" class="checkbox" Va />
+                                        </div>
+                                    </div>
+                                }
+                                <label id="RequestMessage"></label>
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Email Address</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtEmail" value="@Model.AuthorizedRepresentative.EmailAddress" class="form-control" placeholder="Email Address" />
+                                        <input type="text" id="txtEmailID" hidden="hidden" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">First Name</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtFirstName" value="@Model.AuthorizedRepresentative.FirstName" class="form-control" placeholder="First Name" />
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Last Name</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtLastName" value="@Model.AuthorizedRepresentative.LastName" class="form-control" placeholder="Last Name" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Contact No</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtContact" value="@Model.AuthorizedRepresentative.ContactNo" class="form-control" placeholder="Contact No" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            @* *end* Authorized Representative *@
+
+
+                            @*@if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                                {*@
+
+                            @*}*@
+
+
+
+
+
+
+
+
+                            <div id='divonhold'>
+
+
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <div class="offset-sm-2 col-sm-9">
+                                    <input ID="btnSubmit" type="submit" value="Save" class="btn btn-danger" />
+                                    @if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                                    {
+                                        <a href="@Url.Action("Index")" class="btn btn-inverse">Back</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Details")" class="btn btn-inverse">Back</a>
+                                    }
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--./row-->
+
+}
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+@*<style>
+            #tags {
+                /*float:left;*/
+                border: 1px solid #e4e7ea;
+                /*padding:5px;*/
+                font-family: Arial;
+            }
+
+                #tags > span {
+                    cursor: pointer;
+                    display: block;
+                    float: left;
+                    color: #fff;
+                    background: #789;
+                    padding: 5px;
+                    padding-right: 25px;
+                    margin: 4px;
+                }
+
+                    #tags > span:hover {
+                        opacity: 0.7;
+                    }
+
+                    #tags > span:after {
+                        position: absolute;
+                        content: "×";
+                        border: 1px solid;
+                        padding: 2px 5px;
+                        margin-left: 3px;
+                        font-size: 11px;
+                    }
+
+                #tags > input {
+                    /*background:#eee;*/
+                    background: #fff;
+                    border: 0;
+                    /*margin:4px;
+        padding:7px;*/
+                    width: auto;
+                }
+    </style>*@
+
+<script>
+    //VERIFY MPN ID
+    $('#txtResellerMPNID').change(function (e) {
+
+        VerifyMPN();
+
+    });
+
+    function VerifyMPN() {
+        var name = $('#txtResellerMPNID').val();
+
+
+        if (name == '') {
+            //$(".preload").hide();
+            $("#divCheckingMPN").attr("style", "display:none;");
+            $("#divMPNNotExists").attr("style", "display:none;");
+            $("#divMPNVerified").attr("style", "display:none;");
+
+            return;
+        }
+
+
+        $("#divCheckingMPN").attr("style", "display:block;");
+        $("#divMPNNotExists").attr("style", "display:none;");
+        $("#divMPNVerified").attr("style", "display:none;");
+
+
+        //VERIFY MPN
+        $.ajax({
+            url: '/Resellers/VerifyMPNID',
+            data: { mpnID: name },
+            contentType: 'application/html ; charset:utf-8',
+            type: 'GET',
+            dataType: 'html'
+        }).success(function (data) {
+            var data1 = $.parseJSON(data);
+            $("#divCheckingMPN").attr("style", "display:none;");
+
+            //alert(data1);
+            if (data1 == "") {
+                $("#divMPNNotExists").attr("style", "display:block;");
+                $("#divMPNVerified").attr("style", "display:none;");
+                $('#lblMPNResellerName').text("name");
+
+            }
+            else {
+
+                $("#divMPNNotExists").attr("style", "display:none;");
+                $("#divMPNVerified").attr("style", "display:block;");
+
+                //$("label[for = lblMPNResellerName]").text(data1);
+                //$("label[for = lblMPNResellerID]").text(name);
+
+                $('#lblMPNResellerName').text(data1);
+                $('#lblMPNResellerID').text(name);
+
+            }
+
+
+        }).error(function () {
+            //$(".preload").hide();
+            $("#divCheckingMPN").attr("style", "display:none;");
+            $("#divMPNNotExists").attr("style", "display:block;");
+            $("#divMPNVerified").attr("style", "display:none;");
+            $('#lblMPNResellerName').text("name");
+
+        });
+        //END VERIFY MPN
+
+
+    };
+
+
+</script>
+<script>
+    //$(function(){
+    //    var tags = [];
+    //    // ::: TAGS BOX
+
+    //    $("#tags input").on({
+    //        focusout : function() {
+    //            var txt = this.value.replace(/,/g,''); // allowed characters
+    //            if (txt) $("<span/>", { text: txt.toLowerCase(), insertBefore: this });
+    //            this.value = "";
+    //        },
+    //        keyup : function(ev) {
+    //            // if: comma|enter (delimit more keyCodes with | pipe)
+    //            if (/(188)/.test(ev.which))
+    //            {
+    //                if (this.value.length > 2)
+    //                {
+    //                    var textemail = this.value;
+    //                    tags.push(textemail.replace(/,/g, ''));
+    //                    var _email = tags.join();
+    //                    $("#hidden-txtResellerEmail").val(_email);
+    //                }
+    //                $(this).focusout();
+    //            }
+    //        }
+    //    });
+    //    $('#tags').on('click', 'span', function() {
+    //        //if(confirm("Remove "+ $(this).text() +"?"))
+    //        $(this).remove();
+
+    //        const index = tags.indexOf($(this).text());
+    //        tags.splice(index, 1);
+
+    //        var _email = tags.join();
+    //        $("#hidden-txtResellerEmail").val(_email);
+    //    });
+
+    //});
+
+    $('#txtUserName').keyup(function () {
+        str = $(this).val();
+        str = str.replace(/\s/g, '');
+        $(this).val(str);
+    })
+
+
+
+</script>
+
+
+<script>
+    //$(function () {
+    //    $('#Approve').change(function () {
+
+    //        $CheckBox = $('#Approve');
+
+    //        var check;
+
+    //        if ($CheckBox.prop('checked') == true) {
+    //            check = 1;
+    //        }
+    //        else if ($CheckBox.prop('checked') == false) {
+    //            check = 0;
+    //        }
+
+    //        $.ajax({
+    //            url: "/Resellers/AllowToEdit",
+    //            type: "POST",
+    //            data: "{'id' : '" + $('#txtResellerID').val() + "', 'check' : '" + check + "'}",
+    //            contentType: "application/json; charset=utf-8",
+    //            success: function (r) {
+    //                if ($CheckBox.prop('checked') == true) {
+    //                    alert('Allowed Reseller to Edit Authorized Representative')
+    //                }
+    //            }
+    //        });
+
+    //    });
+
+
+
+
+    //}); // checkbox allow to edit
+</script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#btnSend').click(function (event) {
+            $('#btnSubmit').click();
+        });
+
+        //$("#hidden-txtResellerEmail").val($('#txtResellerEmail').val());
+        var usertypeid = @ViewBag.UserTypeID;
+        $('#PassWordGenerated').hide();
+        $('#UserTypeID').val(usertypeid);
+
+        if ($('#UserTypeID').val() == 5 ||  @ViewBag.UserTypeID == 5) {
+            $("#divonhold").show();
+            $("#divAuthorizedRep").show();
+        }
+        else {
+            $("#divonhold").hide();
+            $("#divAuthorizedRep").hide();
+        }
+
+        var allowedit = @ViewBag.AllowEdit;
+
+
+        var usertype = @ViewBag.TypeID;
+
+        if(allowedit == 0 && (usertype == 5 ||  @ViewBag.TypeID == 5) )
+        {
+            $('#txtEmail').attr('disabled', 'disabled');
+            $('#txtFirstName').attr('disabled', 'disabled');
+            $('#txtLastName').attr('disabled', 'disabled');
+            $('#txtContact').attr('disabled', 'disabled');
+            $("#Approve").prop("checked", false);
+        }
+        else
+        {
+            if(allowedit == 0)
+            {
+                $("#Approve").prop("checked", false);
+            }
+            else
+            {
+                $("#Approve").prop("checked", true);
+            }
+        }
+
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(2) a').addClass("active");
+
+
+        /////
+        $("#txtEmail").autocomplete({
+
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Resellers/GetAuthorized",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { email: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+
+                            return {
+                                id: item.ID,
+                                label: item.Email,
+                                value: item.Email,
+                                firstname: item.Firstname,
+                                lastname: item.LastName,
+                                contactno: item.Contactno
+                            };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#txtEmail').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+
+            $("#txtEmailID").val(ui.item.id);
+            $("#txtEmail").val(ui.item.label);
+            $("#txtFirstName").val(ui.item.firstname);
+            $("#txtLastName").val(ui.item.lastname);
+            $("#txtContact").val(ui.item.contactno);
+
+        });
+
+
+        if ($("#lblStat").text() == 1)
+        { $("#ResellerStatus").val(1); }
+        else if($("#lblStat").text() == 0)
+        { $("#ResellerStatus").val(0); }
+        else
+        {$("#ResellerStatus").val(2);}
+
+    });
+
+    $('#btnSubmit').click(function (event) {
+        event.preventDefault();
+
+        $('#divErr').attr("style", "display:none;");
+
+        var mpID = $('#lblMPNResellerName').text();
+        if (mpID == "" || mpID == "name") {
+            $('#txtResellerMPNID').css({ "border": "1px solid red" })
+            $('#txtResellerMPNID').focus();
+            $(".preload").hide();
+            return;
+        }
+
+        $(".preload").show();
+        var Reseller = new Object();
+
+        $CheckBox = $('#Approve');
+
+        var check;
+
+        if ($CheckBox.prop('checked') == true) {
+            check = 1;
+        }
+        else if ($CheckBox.prop('checked') == false) {
+            check = 0;
+        }
+
+        Reseller.AllowEdit = check;
+        Reseller.ResellerID = $('#txtResellerID').val();
+        Reseller.MPNID = $('#txtResellerMPNID').val();
+        Reseller.ResellerName = $('#txtResellerName').val();
+        Reseller.username = $('#txtUserName').val();
+        Reseller.password = $('#lblPassword').text();
+        Reseller.Emails = $('#txtResellerEmail').val();
+        Reseller.CompanyName = $('#txtCompanyName').val();
+        Reseller.SellerID = $('#txtSellerID').val();
+
+        //-- Authorized Representative
+        Reseller.repID = $('#txtEmailID').val();
+        Reseller.FirstName = $('#txtFirstName').val();
+        Reseller.LastName = $('#txtLastName').val();
+        Reseller.ContactNo = $('#txtContact').val();
+        Reseller.EmailAddress = $('#txtEmail').val();
+
+
+        if ($('.check-box').prop('checked') == true) {
+            Reseller.IsVatExempted = true;
+        }
+        else if ($('.check-box').prop('checked') == false) {
+            Reseller.IsVatExempted = false;
+        }
+
+
+        $.ajax({
+            url: "/Resellers/CheckValidEmail",
+            type: "POST",
+            data: JSON.stringify(Reseller),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+
+                var Msg = r;
+
+
+                if ($('#ResellerStatus').val() == 0) {
+                    Reseller.ResellerStatus = 0;
+                }
+                else if($('#ResellerStatus').val() == 1)
+                { Reseller.ResellerStatus = 1; }
+                else
+                { { Reseller.ResellerStatus = 2; }}
+                Reseller.UserTypeID = $('#UserTypeID').val();
+
+                if (Msg == 'okay') {
+                    $.ajax({
+                        url: "/Resellers/Save",
+                        type: "POST",
+                        data: JSON.stringify(Reseller),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (r) {
+                            $(".preload").show();
+                            if (r == 'okay') {
+                                alert("Successfully saved Reseller");
+                                $(".preload").hide();
+                                window.location.href = "/Resellers/Index";
+                            }
+                            else { $(".preload").hide(); alert(r); }
+                        }
+                    });
+                }
+                else {
+                    $('#divErr').attr("style", "display:block;");
+                    $('#lblMsg').text(Msg);
+                    $('#txtResellerMPNID').focus();
+                    $(".preload").hide();
+                }
+            }
+        });
+
+
+
+    });
+
+
+    $('#btnGeneratePassword').click(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: "/Resellers/GeneratePassword",
+            type: "POST",
+            //data: "{'id' : '" + companyId + "'}",
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+                var password = r;
+                $('#lblPassword').text(password);
+                $('#PassWordGenerated').show();
+                $('#btnGeneratePassword').attr('disabled', 'disabled');
+            }
+        });
+    });
+
+    $('#Request').click(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: "/Resellers/RequestToEdit",
+            type: "POST",
+            data: "{'id' : '" + $('#txtResellerID').val() + "'}",
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+                $('#RequestMessage').text('Request sent to Admin');
+                $('#Request').attr('disabled', true);
+            }
+        });
+    });
+
+</script>

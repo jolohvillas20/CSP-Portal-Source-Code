@@ -1,0 +1,400 @@
+﻿@model Portal.Models.Subscriptions
+
+@{
+    ViewBag.Title = "SubscriptionDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="modal_chg_billing_cycle" class="modal fade" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div id="dv_wait" style="position: absolute; background-color: white; opacity: 0.7; z-index: 1500; width: 100%; height: 100%;border-radius:4px;">
+                <div  style="margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%,-50%); transform: translate(-50%,-50%);">
+                        <img src="~/Content/loadingpage.gif" id="img_loading" width="64" height="64" />
+                </div>
+            </div>
+            <div class="modal-header">
+                <button type="button" id="mbtnClose" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    <label style="font-size:16px;">Change Billing Cycle</label>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div style="padding:10px;">
+                        <label style="font-weight:300;">Changing the billing cycle will update all subscriptions that are part of the "order". This will create a new annual term for all subscriptions at the current price based on the price list. The below subscriptions will be updated to "<label id="lblLabelBillingCycle"></label>" billing. To complete this request please click "Ok" and then Submit </label>
+
+                    </div>
+                    <div style="padding:20px;">
+                        <table id="tbl_chg_billing_cycle"></table>
+                        @*<div id="dv_wait" style="margin:auto;width:64px">
+                            <img src="~/Content/loadingpage.gif" id="img_loading" width="64" height="64" />
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="text-align:left">
+                    <button id="btnSubmitBillingCycle" class="btn btn-danger" onclick="changeBillingCycle()">Ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="mbtnCancel">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">@Model.Customers.CompanyName -  Subscriptions</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading"> Details</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+                        
+                        <div style="display:none;">
+                            @Html.EditorFor(model => model.Customers.MicrosoftID)
+                            @Html.EditorFor(model => model.SubscriptionID)
+                            @Html.DisplayFor(model => model.Status)
+                            @Html.DisplayFor(model => model.Offers.MinimumQuantity)
+                        </div>
+
+                        
+
+                        <div class="divDisabled form-group row">
+                            <label class="col-9 col-form-label">@Html.DisplayFor(model => model.OfferName)</label>
+                            <div class="col-9 m-b-40">
+                                @Html.DisplayNameFor(model => model.SubscriptionID):  @Html.DisplayFor(model => model.SubscriptionID)
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+
+                            <div class="divDisabled col-3">
+
+                                <div class="form-group row">
+                                    <label class="col-9 col-form-label">Quantity <span>*</span></label>
+                                    <div class="col-9">
+                                        <input type="text" id="Quantity" value="@Model.Quantity" class="number txtLicenceNo form-control" style="width:50%; display:inline-block;" />
+                                        <span style="display:inline-block;"> @Html.DisplayFor(model => model.Offers.UnitType)</span>
+                                        <span id="spanMinimum" class="text-danger" style="display:none;">Minimum @Model.Offers.MinimumQuantity @Model.Offers.UnitType </span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-3">
+                                <label class="col-9 col-form-label">Status</label>
+                                
+                                <div>
+                                    <div>
+                                        @Html.RadioButtonFor(m =>
+                                        m.Status, "Active", new { @id = "rbtnActive" }) Active
+                                        <div class="divStat" id="divActive" style="display:none; margin-left:16px; margin-bottom:8px;">Renews on @Model.CommitmentEndDate.Value.ToString("dddd MMMMM dd, yyyy")</div>
+                                    </div>
+                                    <div>
+                                        @Html.RadioButtonFor(m => m.Status, "Suspended", new { @id = "rbtnSuspended" }) Suspended
+                                        <div class="divStat" id="divSuspended" style="display:none; margin-left:8px;">Cancels on @Model.CommitmentEndDate.Value.ToString("dddd MMMMM dd, yyyy")</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-3">
+                                <label class="col-9 col-form-label">Billing frequency</label>
+                                <div>
+                                    <div>
+                                        @Html.RadioButtonFor(m => m.BillingCycle, "Monthly", new { @id = "rbtnMonthly" }) Monthly
+                                    </div>
+                                    <div>
+                                        @Html.RadioButtonFor(m => m.BillingCycle, "Annual", new { @id = "rbtnAnnual" }) Annual
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="divDisabled col-3">
+                                <b>Reseller (MPN ID)</b>
+                                @Html.DropDownList("IResellerID", new SelectList(ViewBag.IReseller, "Value", "Text"), null, new { @class = "form-control" })
+                                <label id="message"></label>
+                                <br /><br />
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9 m-t-40">
+                                @if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                                || Portal.Helpers.Sessions.UserTypeID == 1 )
+                                {
+                                <input type="submit" value="Submit" class="btn btn-danger" id="btnSubmit" />
+                                }
+
+                                <a href="@Url.Action("Index")" class="btn btn-inverse">Cancel</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    var GetOrdersByOrderIDLink = '@Url.Action("ChangeBilling", "Customers")';
+    var ChangeBillingCycleLink = '@Url.Action("ChangeOrderBillingCycle", "Customers")'
+
+    var strCustomerId = '@Model.Customers.MicrosoftID';
+    var strOrderId = '@Model.OrderId';
+
+    function changeBillingCycle() {
+
+        $('#dv_wait').show();
+
+        var strBillingCycle = "";
+
+        if ($('#rbtnMonthly').is(':checked')) {
+            strBillingCycle = "Monthly";
+        }; 
+
+        if ($('#rbtnAnnual').is(':checked')) {
+            strBillingCycle = "Annual";
+        }; 
+
+        console.log(strBillingCycle);
+
+        $.ajax({
+            traditional: true,
+            type: 'post',
+            datatype: 'html',
+            data: { CustomerId: strCustomerId, OrderId: strOrderId, BillingCycle: strBillingCycle },
+            url: ChangeBillingCycleLink,
+            cache: true,
+            success: function (request) {
+
+                if (request == "Success") {
+                    $('#modal_chg_billing_cycle').removeClass("show");
+                }
+
+                console.log(request);
+            },
+            error: function (e) {
+                console.log(e);
+                $('#dv_wait').hide();
+            },
+            complete: function (e) {
+                console.log(e);
+                $('#dv_wait').hide();
+            }
+        });
+    }
+
+    function getOrdersByOrderId() {
+
+        $('#tbl_chg_billing_cycle').find('tbody').empty();
+        $('#dv_wait').show();
+        $('#btnSubmitBillingCycle').prop('disabled', true);
+
+        $.ajax({
+            traditional: true,
+            type: 'post',
+            datatype: 'html',
+            data: { CustomerId: strCustomerId, OrderId: strOrderId},
+            url: GetOrdersByOrderIDLink,
+            cache: true,
+            success: function (request) {
+
+                var obj = jQuery.parseJSON(request);
+
+                var i;
+
+                for (i = 0; i < obj.length; i++) {
+
+                    var strFriendlyName = obj[i].FriendlyName;
+                    var strSubscriptionId = obj[i].Id;
+
+                    $('#tbl_chg_billing_cycle').append("<tr style=font-weight:700;><td>" + "• "  + strFriendlyName  + " - " + strSubscriptionId + "</td></tr>");
+
+                }
+
+            },
+            error: function (e) {
+                console.log(e);
+                $('#dv_wait').hide();
+            },
+            complete: function (e) {
+                console.log(e);
+                $('#dv_wait').hide();
+                $('#btnSubmitBillingCycle').prop('disabled', false);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        if($("#IResellerID").val() == "none")
+        {
+            $("#message").text('Reseller is not yet enrolled in CSP')
+        }
+
+        $('#rbtnMonthly').click(function () {
+            if ($(this).is(':checked'))
+                $('#modal_chg_billing_cycle').addClass("show");
+            $('#lblLabelBillingCycle').text("Monthly");
+         
+
+            getOrdersByOrderId();
+        });
+
+        $('#rbtnAnnual').click(function () {
+            if ($(this).is(':checked'))
+                $('#modal_chg_billing_cycle').addClass("show");
+            $('#lblLabelBillingCycle').text("Annual");
+            getOrdersByOrderId();
+        });
+
+        $('#mbtnClose').click(function () {
+            $('#modal_chg_billing_cycle').removeClass("show");
+        });
+
+        $('#mbtnCancel').click(function () {
+            $('#modal_chg_billing_cycle').removeClass("show");
+        });
+        
+
+    });
+
+    var stat = $('input[name=Status]:checked').val();
+    //alert(stat);
+    if (stat != 'Active') {
+        $('#divActive').attr("style", "display:none; margin-left:16px; margin-bottom:8px;");
+        $('#divSuspended').attr("style", "display:block;");
+        $('#Quantity').attr('disabled', true);
+        $('#IResellerID').attr('disabled', true);
+    }
+    else {
+        $('#divActive').attr("style", "display:block; margin-left:16px; margin-bottom:8px;");
+        $('#divSuspended').attr("style", "display:none;");
+        $('#Quantity').attr('disabled', false);
+        $('#IResellerID').attr('disabled', false);
+    }
+
+    $('input[name=Status]').change(function (e) {
+        e.preventDefault();
+        var stat = $('input[name=Status]:checked').val();
+        if (stat != 'Active') {
+            $('#divActive').attr("style", "display:none;");
+            $('#divSuspended').attr("style", "display:block;");
+            $('#Quantity').attr('disabled', true);
+            $('#IResellerID').attr('disabled', true);
+        }
+        else {
+            $('#divActive').attr("style", "display:block; margin-left:16px; margin-bottom:8px;");
+            $('#divSuspended').attr("style", "display:none;");
+            $('#Quantity').attr('disabled', false);
+            $('#IResellerID').attr('disabled', false);
+        }
+    });
+
+    //NUMBER - QUANTITY
+    var checking = function (event) {
+        var data = this.value;
+        if ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0) {
+
+        } else
+            event.preventDefault();
+    };
+
+    function addListener(list) {
+        for (var i = 0; i < list.length; i++) {
+            list[i].addEventListener('keypress', checking);
+        }
+    }
+    var classList = document.getElementsByClassName('number');
+    addListener(classList);
+
+
+    //END NUMBER - QUANTITY
+    $("#Quantity").change(function (e) {
+        var cnt = parseFloat(((this.value)));
+
+        var minQty = @Model.Offers.MinimumQuantity;
+
+        if (this.value == '') {
+            $("#Quantity").val(minQty);
+            $("#spanMinimum").attr("style", "display:block; color:red;");
+            return;
+        }
+
+        if (minQty > cnt)
+        {
+            $("#Quantity").val(minQty);
+            $("#spanMinimum").attr("style", "display:block; color:red;");
+            return;
+        }
+
+        $("#spanMinimum").attr("style", "display:none;");
+    });
+
+    $('#btnSubmit').click(function (e) {
+        e.preventDefault();
+        //SAVE
+        var custom = new Object();
+        custom.MicrosoftID = $('#Customers_MicrosoftID').val();;
+        custom.SubscriptionID = $('#SubscriptionID').val();;
+        custom.Quantity = $('#Quantity').val();;
+        custom.Status = $('input[name=Status]:checked').val()
+
+        $('#img').show(); //<----here
+        $('#btnSubmit').attr('disabled', 'disabled');
+        $('#btnSubmit').attr("value", "Please wait..");
+
+        $.ajax({
+            url: "/Customers/UpdateSubscription",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(custom),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+
+                if (r == '0') {
+                    alert('Failed to update subscription.');
+                    $('#img').hide(); //<----here
+                    $('#btnSubmit').prop('disabled', false);
+                    $('#btnSubmit').attr("value", "Submit");
+                }
+                else {
+                    window.location.href = "/Customers/Subscriptions/" + r;
+                }
+            },
+            error: function (xhr, acc, errorThrown) {
+                alert('Failed to update subscription.');
+                $('#img').hide(); //<----here
+                $('#btnSubmit').prop('disabled', false);
+                $('#btnSubmit').attr("value", "Submit");
+
+            }
+        });
+
+    });
+</script>

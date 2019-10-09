@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+       
+
+        @*
+    <ul class="nav navbar-top-links navbar-right pull-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="@/*Url.Content("~/Content/eliteadmin/plugins/images/users/varun.jpg")*/" alt="user-img" width="36" class="img-circle">
+            <b class="hidden-xs">@User.Identity.GetUserName()</b> </a>
+            <ul class="dropdown-menu dropdown-user animated flipInY">
+                <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-power-off"></i> Logout</a></li>
+            </ul>
+            <!-- /.dropdown-user -->
+        </li>
+
+    </ul>*@
+
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    if (Portal.Helpers.Sessions.UserID.ToString() == "")
+    {
+
+        <ul class="nav navbar-top-links navbar-right pull-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+                    <img src="@Url.Content("~/Content/eliteadmin/plugins/images/users/anonymous.jpg")" alt="user-img" width="36" class="img-circle">
+                    <b class="hidden-xs"></b>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated flipInY">
+                    <li><a href="@Url.Action("Login", "Home")" id="loginLink"><i class="fa fa-power-off"></i> Login</a></li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+
+        </ul>
+
+
+        @*<ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Log in", "Login", "Home", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>*@
+    }
+
+    else
+    {
+        <ul class="nav navbar-top-links navbar-right pull-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+                    <img src="@Url.Content("~/Content/eliteadmin/plugins/images/users/anonymous.jpg")" alt="user-img" width="36" class="img-circle">
+                    <b class="hidden-xs">@Session["AccountName"].ToString()</b>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated flipInY">
+                    <li><a href="@Url.Action("Login", "Home")"><i class="fa fa-power-off"></i> Logout</a></li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+
+        </ul>
+    }
+}

@@ -1,0 +1,114 @@
+﻿@*@model IEnumerable<Microsoft.Store.PartnerCenter.Models.Offers.Offer>*@
+@model IPagedList<Portal.Models.Offers>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Offers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Offers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+
+
+<div class="white-box">
+    @*<h3 class="box-title">&nbsp;</h3>
+        <p class="text-muted  m-b-20">
+            <a href="@Url.Action("Create")" class="btn btn-danger pull-right">Create New</a>
+
+            <div class="clearfix"></div>
+        </p>*@
+
+    @using (Html.BeginForm())
+    {
+        <div class="row ToolsHolder">
+            <div class="col-3 offset-sm-8">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+            </div>
+            <div class="col-1 no-padding">
+                <input type="submit" value="Search" class="btn btn-danger" />
+            </div>
+            @*<div class="col-1 no-padding">
+                <a href="@Url.Action("Refresh")" class="btn btn-danger">Refresh</a>
+            </div>*@
+        </div>
+    }
+    @*search*@
+
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Offer ID")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Description")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Category")
+                    </th>
+                    <th>@Html.DisplayName("Price")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OffersID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DealersPrice)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- pager -->
+
+        <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+
+        <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(3) a').addClass("active");
+
+    });
+
+</script>

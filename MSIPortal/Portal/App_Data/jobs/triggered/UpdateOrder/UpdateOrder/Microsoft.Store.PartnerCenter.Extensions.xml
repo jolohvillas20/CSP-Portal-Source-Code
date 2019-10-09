@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Store.PartnerCenter.Extensions</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials">
+            <summary>
+            Partner service credentials based on azure active directory application credentials.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.DefaultAadAuthority">
+            <summary>
+            The default AAD authority endpoint.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.DefaultGraphEndpoint">
+            <summary>
+            The default graph endpoint.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.applicationSecret">
+            <summary>
+            The azure active directory application secret.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.aadApplicationDomain">
+            <summary>
+            The application domain in azure active directory.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.activeDirectoryAuthority">
+            <summary>
+            The active directory authentication endpoint.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.graphApiEndpoint">
+            <summary>
+            The graph API endpoint.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials"/> class.
+            </summary>
+            <param name="aadApplicationId">The application Id in Azure Active Directory.</param>
+            <param name="aadApplicationSecret">The application secret in Azure Active Directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials"/> class.
+            </summary>
+            <param name="aadApplicationId">The application Id in Azure Active Directory.</param>
+            <param name="aadApplicationSecret">The application secret in Azure Active Directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+            <param name="aadAuthorityEndpoint">The active directory authority endpoint.</param>
+            <param name="graphApiEndpoint">The AAD graph API endpoint.</param>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.AuthenticateAsync(Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Authenticates with the partner service.
+            </summary>
+            <param name="requestContext">An optional request context.</param>
+            <returns>A task that is complete when the authentication is complete.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.ApplicationPartnerCredentials.OnCredentialsRefreshNeededAsync(Microsoft.Store.PartnerCenter.IPartnerCredentials,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Called when a partner credentials instance needs to be refreshed.
+            </summary>
+            <param name="credentials">The outdated partner credentials.</param>
+            <param name="context">The partner context.</param>
+            <returns>A task that is complete when the credential refresh is complete.</returns>
+        </member>
+        <member name="T:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials">
+            <summary>
+            A base implementation for partner credentials.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials"/> class.
+            </summary>
+            <param name="clientId">The azure active directory client Id.</param>
+        </member>
+        <member name="P:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.PartnerServiceToken">
+            <summary>
+            Gets the partner service token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.ExpiresAt">
+            <summary>
+            Gets the expiry time in UTC for the token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.ClientId">
+            <summary>
+            Gets the azure active directory client Id.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.AADToken">
+            <summary>
+            Gets or sets the azure active directory token.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.IsExpired">
+            <summary>
+            Indicates whether the partner credentials have expired or not.
+            </summary>
+            <returns>True if credentials have expired. False if not.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.BasePartnerCredentials.AuthenticateAsync(Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Authenticates with the partner service.
+            </summary>
+            <param name="requestContext">An optional request context.</param>
+            <returns>A task that is complete when authentication is finished.</returns>
+        </member>
+        <member name="T:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials">
+            <summary>
+            Use this class to generate Partner Center API credentials. User plus application based authentication and application only authentication
+            are supported.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.instance">
+            <summary>
+            A singleton instance of the partner credentials.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.Instance">
+            <summary>
+            Gets an instance of the partner credentials.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByApplicationCredentials(System.String,System.String,System.String,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Generates partner credentials using azure active directory application credentials.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure web application.</param>
+            <param name="applicationSecret">The application secret with azure active directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByApplicationCredentialsAsync(System.String,System.String,System.String,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Asynchronously generates partner credentials using azure active directory application credentials.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure web application.</param>
+            <param name="applicationSecret">The application secret with azure active directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByUserCredentials(System.String,Microsoft.Store.PartnerCenter.AuthenticationToken,Microsoft.Store.PartnerCenter.Extensions.TokenRefresher,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Generates partner credentials using a user plus application azure active directory token.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure native application.</param>
+            <param name="authenticationToken">The azure active directory token.</param>
+            <param name="aadTokenRefresher">An optional delegate which will be called when the azure active directory token
+            expires and can no longer be used to generate the partner credentials. This delegate should return
+            an up to date azure active directory token.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByUserCredentialsAsync(System.String,Microsoft.Store.PartnerCenter.AuthenticationToken,Microsoft.Store.PartnerCenter.Extensions.TokenRefresher,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Asynchronously generates partner credentials using a user plus application azure active directory token.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure native application.</param>
+            <param name="authenticationToken">The azure active directory token.</param>
+            <param name="aadTokenRefresher">An optional delegate which will be called when the azure active directory token
+            expires and can no longer be used to generate the partner credentials. This delegate should return
+            an up to date azure active directory token.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByApplicationCredentials(System.String,System.String,System.String,System.String,System.String,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Generates partner credentials using azure active directory application credentials with the provided AAD overrides.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure web application.</param>
+            <param name="applicationSecret">The application secret with azure active directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+            <param name="aadAuthorityEndpoint">The active directory authority endpoint.</param>
+            <param name="graphEndpoint">The AAD graph API endpoint.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.PartnerCredentials.GenerateByApplicationCredentialsAsync(System.String,System.String,System.String,System.String,System.String,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Asynchronously generates partner credentials using azure active directory application credentials with the provided AAD overrides.
+            </summary>
+            <param name="clientId">The client id of the application in azure active directory. This application should be an Azure web application.</param>
+            <param name="applicationSecret">The application secret with azure active directory.</param>
+            <param name="aadApplicationDomain">The application domain in Azure Active Directory.</param>
+            <param name="aadAuthorityEndpoint">The active directory authority endpoint.</param>
+            <param name="graphEndpoint">The AAD graph API endpoint.</param>
+            <param name="requestContext">An optional request context.</param>
+            <returns>The partner service credentials.</returns>
+        </member>
+        <member name="T:Microsoft.Store.PartnerCenter.Extensions.TokenRefresher">
+            <summary>
+            Defines a delegate used to retrieve updated tokens.
+            </summary>
+            <param name="expiredAuthenticationToken">The authentication token which has expired.</param>
+            <returns>A delegate used to retrieve updated tokens.</returns>
+        </member>
+        <member name="T:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials">
+            <summary>
+            Partner service credentials based on azure active directory user credentials.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials.tokenRefresher">
+            <summary>
+            The delegate used to refresh the azure active directory token.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials.#ctor(System.String,Microsoft.Store.PartnerCenter.AuthenticationToken,Microsoft.Store.PartnerCenter.Extensions.TokenRefresher)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials"/> class.
+            </summary>
+            <param name="aadApplicationId">The id of the application in azure active directory.</param>
+            <param name="aadAuthenticationToken">The azure active directory token.</param>
+            <param name="aadTokenRefresher">An optional delegate which will be called when the azure active directory token
+            expires and can no longer be used to generate the partner credentials. This delegate should return
+            an up to date azure active directory token.</param>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials.OnCredentialsRefreshNeededAsync(Microsoft.Store.PartnerCenter.IPartnerCredentials,Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Called when a partner credentials instance needs to be refreshed.
+            </summary>
+            <param name="credentials">The outdated partner credentials.</param>
+            <param name="context">The partner context.</param>
+            <returns>A task that is complete when the credential refresh is done.</returns>
+        </member>
+        <member name="M:Microsoft.Store.PartnerCenter.Extensions.UserPartnerCredentials.RefreshAsync(Microsoft.Store.PartnerCenter.RequestContext.IRequestContext)">
+            <summary>
+            Refreshes the partner credentials.
+            </summary>
+            <param name="context">The partner context.</param>
+            <returns>A task which is complete when the refresh is done.</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,512 @@
+﻿@model Portal.Models.Users
+@{
+    ViewBag.Title = "Tagging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<h2></h2>
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Tagging</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Tag</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+
+                           
+                            <input type="text" id="txtModule" value="@ViewBag.Module" hidden="hidden" />
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Name</label>
+                                <div class="col-5">
+                                    <input type="text" id="txtUSer" value="@Model.FirstName  @Model.LastName" class="form-control" placeholder="Name" />
+                                    <input type="text" id="txtUserID" value="@Model.ID" hidden="hidden" />
+                                    <label id="txtName"></label>
+                                </div>
+                            </div>
+
+                            @*<div class="form-group row">
+                                <label class="col-2 col-form-label">Module:</label>
+                                <div class="col-5">
+                                   
+
+                                    
+                                 @Html.DropDownList("Modules", new SelectList(ViewBag.Modules, "Name", "Name",ViewBag.Module))
+                                </div>
+                            </div>*@
+
+
+
+                            @*<div id="divResellers" style="display:none;">*@
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Reseller</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtReseller" value="" class="form-control" placeholder="Resellers" />
+                                        <input type="text" id="txtResellerID" hidden="hidden" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <table id="tblItems" class="table table-hover table-striped table-bordered">
+                                        @foreach (var reseller in Model.UserAccessHeader.Where(p => p.Category == "Resellers"))
+                                        { <tbody>
+                                            @foreach (var reseller1 in reseller.UserAccessDetails)
+                                            {
+
+                                                Html.RenderPartial("_TaggingDetailsRow", reseller1);
+                                            }
+                                        </tbody>
+                                        }
+                                        </table>
+                                      </div>
+
+
+
+
+                            @*</div>*@
+
+
+                            @*<div id="divOffers" style="display:none;">
+
+                                <div class="form-group row">
+
+                                    <label class="col-2 col-form-label">Offer</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtOffer" value="" class="form-control" placeholder="Offers" />
+                                        <input type="text" id="txtOfferID" hidden="hidden" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <table id="tblItems" class="table table-hover table-striped table-bordered">
+                                        @foreach (var offers in Model.UserAccessHeader.Where(p => p.Category == "Offers"))
+                                        {
+                                            <tbody>
+                                            @foreach (var offers1 in offers.UserAccessDetails)
+                                            {
+
+                                                Html.RenderPartial("_TaggingDetailsRow", offers1);
+
+                                            }
+                                           </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div id="divCustomers" style="display:none;">
+
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Customer</label>
+                                    <div class="col-5">
+                                        <input type="text" id="txtCustomer" value="" class="form-control" placeholder="Customers" />
+                                        <input type="text" id="txtCustomerID" hidden="hidden" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <table id="tblItems" class="table table-hover table-striped table-bordered">
+                                        @foreach (var customer in Model.UserAccessHeader.Where(p => p.Category == "Customers"))
+                                        {
+                                            <tbody>
+                                            @foreach (var customer1 in customer.UserAccessDetails)
+                                            {
+                                                Html.RenderPartial("_TaggingDetailsRow", customer1);
+                                            }
+                                           </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>*@
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+@*<script>
+
+        $(document).ready(function () {
+
+            var mod = $("#txtModule").val();
+            $('#Modules').val(mod);         
+
+            if ($('#Modules').val() == "Resellers")
+            {
+                $("#divResellers").show();
+                $("#divOffers").hide();
+                $("#divCustomers").hide();
+            }
+            else if ($('#Modules').val() == "Offers")
+            {
+                $("#divResellers").hide();
+                $("#divOffers").show();
+                $("#divCustomers").hide();
+            }
+            else if ($('#Modules').val() == "Customers")
+            {
+                $("#divResellers").hide();
+                $("#divOffers").hide();
+                $("#divCustomers").show();
+            }
+        })
+    </script>
+
+<script>
+
+
+    $("#Modules").change(function () {
+        if ($('#Modules').val() == "Resellers") {
+            $("#divResellers").show();
+            $("#divOffers").hide();
+            $("#divCustomers").hide();
+        }
+        else if ($('#Modules').val() == "Offers") {
+            $("#divResellers").hide();
+            $("#divOffers").show();
+            $("#divCustomers").hide();
+        }
+        else if ($('#Modules').val() == "Customers") {
+            $("#divResellers").hide();
+            $("#divOffers").hide();
+            $("#divCustomers").show();
+        }
+
+
+    });
+</script>*@
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        //$('#side-menu li:nth-child(2) a').addClass("active");
+
+
+        /////
+        $("#txtUSer").autocomplete({
+
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/UserTagging/GetUser",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { user: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+
+                            return {
+                                id: item.ID,
+                                label: item.User,
+                                value: item.User
+                            };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#txtUSer').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "/UserTagging/CheckTagging",
+                type: "POST",
+                dataType: "json",
+                data: "{'userID' : '" + ui.item.id + "'}",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+
+                  
+                    if (r == "new") {
+                        $("#txtUserID").val(ui.item.id);
+                        $("#txtUSer").val(ui.item.label);
+                        $("#txtName").html(ui.item.label);
+                    }
+                    else {
+                       
+                        window.location.href = "/UserTagging/Tagging?ID=" + ui.item.id + "&module=" + "Resellers";
+                    }
+
+                }
+            });
+           
+        
+        });
+
+    })
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        /////
+        $("#txtReseller").autocomplete({
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/UserTagging/GetReseller",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { user: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+
+                            return {
+                                id: item.ID,
+                                label: item.User,
+                                value: item.User
+                            };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#txtReseller').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+
+            var userID = $('#txtUserID').val();
+            var Category = "Resellers";
+            var taggedid = ui.item.id;
+            var taggedname = ui.item.label;
+          
+            if ($('#txtUserID').val() == 0)
+            { alert('name of Sales AE is Required');}
+            else
+            {
+                $.ajax({
+                    url: "/UserTagging/AddTagging",
+                    type: "POST",
+                    data: "{'Module' : '" + Category + "','UsersID' : '" + userID + "','TaggedID' : '" + taggedid + "','TaggedName' : '" + taggedname + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (r) {
+
+                        window.location.href = "/UserTagging/Tagging?ID=" + userID + "&module=" + Category;
+                    }
+                });
+            }
+
+            $("#txtResellerID").val('');
+            $("#txtReseller").val('');
+
+
+        });
+
+    })
+
+</script>
+
+@*<script>
+
+    $(document).ready(function () {
+        /////
+        $("#txtOffer").autocomplete({
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/UserTagging/GetOffer",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { user: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+
+                            return {
+                                id: item.ID,
+                                label: item.User,
+                                value: item.User
+                            };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#txtOffer').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+
+            var userID = $('#txtUserID').val();
+            var Category = $('#Modules').val();
+            var taggedid = ui.item.id;
+            var taggedname = ui.item.label;
+
+            $.ajax({
+                url: "/UserTagging/AddTagging",
+                type: "POST",
+                data: "{'Module' : '" + Category + "','UsersID' : '" + userID + "','TaggedID' : '" + taggedid + "','TaggedName' : '" + taggedname + "'}",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+
+                    window.location.href = "/UserTagging/Tagging?ID=" + userID + "&module=" + Category;
+                }
+            });
+
+            $("#txtOfferID").val('');
+            $("#txtOffer").val('');
+
+
+        });
+
+    })
+
+</script>*@
+
+@*<script>
+
+    $(document).ready(function () {
+        /////
+        $("#txtCustomer").autocomplete({
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "/UserTagging/GetCustomer",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { user: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+
+                            return {
+                                id: item.ID,
+                                label: item.User,
+                                value: item.User
+                            };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#txtCustomer').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+
+            var userID = $('#txtUserID').val();
+            var Category = $('#Modules').val();
+            var taggedid = ui.item.id;
+            var taggedname = ui.item.label;
+
+            $.ajax({
+                url: "/UserTagging/AddTagging",
+                type: "POST",
+                data: "{'Module' : '" + Category + "','UsersID' : '" + userID + "','TaggedID' : '" + taggedid + "','TaggedName' : '" + taggedname + "'}",
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+
+                    window.location.href = "/UserTagging/Tagging?ID=" + userID + "&module=" + Category;
+                }
+            });
+
+            $("#txtCustomerID").val('');
+            $("#txtCustomer").val('');
+
+
+        });
+
+    })
+
+</script>*@

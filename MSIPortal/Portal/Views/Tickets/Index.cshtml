@@ -1,0 +1,162 @@
+﻿@*@model IEnumerable<Portal.Models.Tickets>*@
+@*@model IPagedList<Portal.Models.Tickets>
+    @using PagedList.Mvc;
+    @using PagedList;*@
+@model Portal.Helpers.TicketViewModel
+
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Tickets</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="white-box">
+    @using (Html.BeginForm())
+    {
+
+        <div class="row ToolsHolder">
+            <div class="col-2">
+                @if (Portal.Helpers.Sessions.ResellerStatus != 2 && Portal.Helpers.Sessions.UserTypeID == 5)
+                {
+                <a href="@Url.Action("Create")" class="btn btn-danger">Create New</a>
+                }
+            </div>
+            <div class="col-3 offset-sm-6">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "Find"})
+               
+            </div>
+            <div class="col-1 no-padding">
+                <input type="submit" id="btn-search" value="Search" class="btn btn-danger" />
+            </div>
+        </div>
+
+
+    }
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("Title", "Admin", new { sortColumn = "title", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Description", "Admin", new { sortColumn = "description", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Ticket Date", "Admin", new { sortColumn = "ticketdate", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Status", "Admin", new { sortColumn = "status", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Last Remarks", "Admin", new { sortColumn = "TicketID", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Tickets)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                @item.ResellerName(item.TicketSenderID);
+                            }
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TicketDate)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+
+                        <td>
+                            @{
+                                @item.LastRemarks(item.TicketID);
+                            }
+                        </td>
+                        <td class="text-center">
+@if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                                                              || Portal.Helpers.Sessions.UserTypeID == 1)
+{
+                            <a href="@Url.Action("Edit", new { id = item.TicketID })" data-toggle="tooltip" data-original-title="Edit" class="btn btn-success btn-xs btn-1f">
+                                <i class="fa fa-edit"></i>
+                            </a>
+}
+                            <a href="@Url.Action("Details", new {  id=item.TicketID })" data-toggle="tooltip" data-original-title="Details" class="btn btn-primary btn-xs btn-1f">
+                                <i class="fa fa-list"></i>
+                            </a>
+                            @*@Html.ActionLink("Details", "Details", new { id=item.TicketID })*@
+                            @*@Html.ActionLink("Delete", "Delete", new { id=item.TicketID })*@
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+        <!-- pager -->
+        @if (Model.Pager.EndPage > 1)
+        {
+            <div class="col-sm-9 no-padding col-sm-offset-3">
+
+                <ul class="pagination pull-right">
+                    @if (Model.Pager.CurrentPage > 1)
+                {
+                        <li>
+                            @Html.ActionLink("First", "Admin", new { sortOrder = ViewBag.EMNoSortParm, SearchStringMO = ViewBag.CurrentFilter_MO })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Previous", "Admin", new { page = (Model.Pager.CurrentPage - 1), SearchStringMO = ViewBag.CurrentFilter_MO })
+                        </li>
+                    }
+
+                    @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                {
+                        <li class="@(page == Model.Pager.CurrentPage ? " active" : "" )">
+                            @Html.ActionLink(page.ToString(), "Admin", new
+                       {
+                           page = @page,
+                           SearchStringMO = ViewBag.CurrentFilter_MO
+                       })
+                        </li>
+                    }
+
+                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                {
+                        <li>
+                            @Html.ActionLink("Next", "Admin", new { page = (Model.Pager.CurrentPage + 1), SearchStringMO = ViewBag.CurrentFilter_MO })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Last", "Admin", new { page = (Model.Pager.TotalPages), SearchStringMO = ViewBag.CurrentFilter_MO })
+                        </li>
+                    }
+                </ul>
+
+                <div class="clearfix"></div>
+
+            </div>
+        }
+
+
+
+    </div>
+
+</div>

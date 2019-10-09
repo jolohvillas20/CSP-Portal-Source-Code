@@ -1,0 +1,206 @@
+﻿@*@model IEnumerable<Portal.Models.Customers>*@
+@model IPagedList<Portal.Models.Customers>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Customers";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Customers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="display:none;" onclick="closeModal();return false;" class="close" data-dismiss="modal">&times;</button>
+                <label style="font-weight:300;">Synching partner center customers</label>
+            </div>
+            <div class="modal-body" style="margin:auto">
+                <img src="~/Content/loadingpage.gif"  style="height:100px;width:100px;margin-left:auto;margin-right:auto;display:block" /><br />
+                <div style="text-align:center;">
+                    <label>Loading please wait...</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="text-align:left">
+                    @*<button onclick="mcasubscription(this)" class="btn btn-danger">Save and continue</button>*@
+                    <button type="button" style="display:none;" id="btnCloseLoadingModal" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <button type="button" id="btnOpenLoadingModal" style="display:none;" class="btn btn-danger" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#myModal">Modal</button>
+</div>
+
+
+<div class="white-box">
+    @*<h3 class="box-title">&nbsp;</h3>*@
+
+
+    @using (Html.BeginForm())
+    {
+
+        <div class="row ToolsHolder">
+            @if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                                              || Portal.Helpers.Sessions.UserTypeID == 1 )
+            {
+            <div class="col-2">
+                <a href="@Url.Action("Create")" class="btn btn-danger">Create New</a>
+                
+            </div>
+            }
+            <div class="col-2 offset-sm-3">
+                @*@Html.TextBox("Reseller", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "Reseller dropdown" })*@
+
+            </div>
+            <div class="col-5">
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:100%">
+                            @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find",@style="height:35px;" })
+                        </td>
+                        <td style="text-align:right">
+                            <input type="submit" style="height:35px" value="Search" class="btn btn-danger" />
+                        </td>
+                        <td style="text-align:right" >
+                            <button onclick="syncCustomers(this); return false;" data-toggle="tooltip" title="Sync partner center customers" style="margin-left:10px;height:35px"  class="btn btn-danger"><span class="glyphicon glyphicon-refresh"></span></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            @*<div class="col-1">
+            </div>*@
+            @*<div class="col-1">
+            </div>*@
+        </div>
+    }
+    @*search*@
+
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("Company name", "Index", new { sortColumn = "companyname", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Primary domain name", "Index", new { sortColumn = "domainname", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Microsoft ID", "Index", new { sortColumn = "microsoftid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                       
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @*@Html.DisplayFor(modelItem => item.CompanyProfile)*@
+                        <td>
+                            @Html.ActionLink(item.CompanyName, "Subscriptions", new { MicrosoftID = item.MicrosoftID, id = item.ID })
+                        </td>
+                        <td>
+                            @item.DomainName.Replace(".onmicrosoft.com", "") .onmicrosoft.com
+                            @*@Html.DisplayFor(modelItem => item.DomainName.Replace(".onmicrosoft.com", ""))*@ 
+                        </td>
+                        <td>
+                            @if (item.MicrosoftID != "")
+                            {
+                                @Html.DisplayFor(modelItem => item.MicrosoftID)
+                            }
+                            else
+                            { 
+                                @Html.Raw("Pending")
+                            }
+                        </td>
+                        <td class="text-center">
+
+                            <a href="@Url.Action("Details", new { MicrosoftID = item.MicrosoftID, id = item.ID })" data-toggle="tooltip" data-original-title="Details" class="btn btn-primary btn-xs btn-1f">
+                                <i class="fa fa-list"></i>
+                            </a>
+                            @if (item.MicrosoftID != "")
+                            {
+                                <a href="@Url.Action("Subscriptions", new { MicrosoftID = item.MicrosoftID, id = item.ID })" data-toggle="tooltip" data-original-title="View subscriptions" class="btn btn-info btn-xs btn-1f">
+                                    <i class="fa fa-circle-o-notch"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- pager -->
+
+        <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+
+        <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+         new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(3) a').addClass("active");
+
+    });
+
+     var syncCustomerLink = '@Url.Action("GetPagedCustomer", "Customers")';
+
+    function closeModal() {
+        document.getElementById("myModal").className = "modal fade";
+    }
+
+    function syncCustomers(e) {
+
+        //document.getElementById("myModal").className = "modal fade show";
+
+        document.getElementById("btnOpenLoadingModal").click();
+        
+            $.ajax({
+            traditional: true,
+            type: 'post',
+            datatype: 'html',
+             data: { },
+             url: syncCustomerLink,
+            cache: true,
+            success: function (request) {
+                console.log(request + "|" + CustomerId);
+                //@ViewBag.TokenStatus = request;
+            },
+            error: function (e) {
+                console.log(e);
+            },
+            complete: function (e) {
+                document.getElementById("btnCloseLoadingModal").click();
+            }
+        });
+    }
+
+</script>
+

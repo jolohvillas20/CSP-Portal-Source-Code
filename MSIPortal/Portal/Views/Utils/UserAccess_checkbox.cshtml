@@ -1,0 +1,22 @@
+﻿@model Portal.Models.UserAccesses
+
+@Html.HiddenFor(x => x.ID)
+@Html.HiddenFor(x => x.UserTypeID)
+@Html.HiddenFor(x => x.ModuleID)
+<tr>
+    <td>
+        @Html.DisplayFor(Model => Model.Modules.Name)
+    </td>
+    <td>
+        @Html.CheckBoxFor(Model => Model.CanView.Value)
+    </td>
+    <td>
+        @Html.CheckBoxFor(Model => Model.CanEdit.Value)
+    </td>
+    <td>
+        @Html.CheckBoxFor(Model => Model.CanDelete.Value)
+    </td>
+    <td >
+        @Html.CheckBoxFor(Model => Model.CanDecide.Value)
+    </td>
+</tr>

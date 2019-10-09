@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Portal.Models.OrderItems>
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Order Items</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Details</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+                        <table class="table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Offer Name</th>
+                                    <th>Quantity</th>
+                                    <th>Category</th>
+                                    <th>MPN ID</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(model => item.OrdersID)</td>
+                                        <td>@Html.DisplayFor(model => item.Offers.Name)</td>
+                                        @if (item.Offers.UnitType != "Usage-based")
+                                        {
+                                            <td>@Html.DisplayFor(model => item.Quantity) @Html.DisplayFor(model => item.Offers.UnitType)</td>
+                                            <td>@Html.DisplayFor(model => item.Offers.Category)</td>
+                                        }
+                                        else
+                                        {
+                                            <td colspan="2">
+                                                @Html.DisplayFor(model => item.Offers.UnitType)
+                                            </td>
+                                        }
+                                        <td>@Html.DisplayFor(model => item.PartnerIdOnRecord)</td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+
+
+                        <div class="form-group m-b-0 m-t-40">
+                            <div class="offset-sm-2 col-sm-9">
+                                <a href="@Url.Action("Index")" class="btn btn-inverse">Back</a>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(4) a').addClass("active");
+
+    });
+
+</script>

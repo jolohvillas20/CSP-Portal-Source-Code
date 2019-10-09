@@ -1,0 +1,125 @@
+﻿<form>
+
+    <div class="form">
+
+        <div class="form-group row">
+            <label class="col-12 col-form-label">
+                Use the email template below to create an invitation to an indirect reseller to join a partnership.
+                <br />                
+            </label>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-12 col-form-label">Email text</label>
+            <div class="col-12">
+
+                <textarea id="txtEmailText" class="form-control">
+                    Dear [Indirect reseller],
+
+                    SDS of Wordtext Systems, Inc. invites you to authorize Wordtext Systems, Inc. to be your Microsoft indirect provider. As an indirect reseller, you are eligible for sales incentives and broader product selection through access to indirect providers.
+
+                    Click the following link to accept this invitation and to authorize Wordtext Systems, Inc. to be your Microsoft indirect provider. Welcome aboard!
+
+                    https://partnercenter.microsoft.com/pcv/valueaddedresellers/relationshiprequest/a499d7c5-d924-4323-be53-2124ab969017
+
+                </textarea>
+
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <div class="col-5">
+                <input type="email" value="" id="txtEmailAdd" placeholder="name@email.com" required class="form-control" />
+            </div>
+            <div class="col-2 no-padding">
+                <input type="submit" value="Send email" id="btnSend" class="btn btn-danger" />
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<script>
+
+    $("#btnSend").click(function (e) {
+
+        e.preventDefault();
+
+
+        //VALIDATE EMAIL
+        var _emailMsg = $("#txtEmailText").val();
+        var _emailAdd = $("#txtEmailAdd").val();
+
+        if (_emailMsg == "") {
+            alert('Email message is required. ');
+            $("#txtEmailText").focus();
+            return;
+        }
+        if (_emailAdd == "") {
+            alert('Email address is required. ');
+            $("#txtEmailAdd").focus();
+            return;
+        }
+
+        if (!ValidateEmail($("#txtEmailAdd").val())) {
+
+            alert(ValidateEmail($("#txtEmailAdd").val()));
+            //alert("Invalid email address.");
+            $("#txtEmailAdd").focus();
+            return;
+        }
+
+
+        //SAVE
+        var custom = new Object();
+        custom.EmailMessage = _emailMsg;
+        custom.EmailAddress = _emailAdd;
+
+
+        $('#img').show(); //<----here
+        $('#btnSend').attr('disabled', 'disabled');
+        $('#btnSend').attr("value", "Please wait..");
+
+
+        $.ajax({
+            url: "/Customers/SendRequest",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(custom),
+            contentType: "application/json; charset=utf-8",
+            success: function (r) {
+
+                if (r == '0') {
+                    alert('Failed to send relationship request.');
+                    $('#btnCancel').click();
+                    $('#img').hide(); //<----here
+                    $('#btnSend').prop('disabled', false);
+                    $('#btnSend').attr("value", "Send email");
+                }
+                else {
+                    $('#btnCancel').click();
+
+                }
+            },
+            error: function (xhr, acc, errorThrown) {
+                alert('Failed to send relationship request.');
+                $('#img').hide(); //<----here
+                $('#btnSend').prop('disabled', false);
+                $('#btnSend').attr("value", "Send email");
+                $('#btnCancel').click();
+
+            }
+        });
+
+
+    });
+
+
+    function ValidateEmail($email) {
+        var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,6})?$/;
+        return emailReg.test($email);
+    }
+
+</script>

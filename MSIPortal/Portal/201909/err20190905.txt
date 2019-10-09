@@ -1,0 +1,9 @@
+09/05/2019 10:49:45 AM : Failure sending mail.
+09/05/2019 1:29:04 PM : Failure sending mail.
+09/05/2019 1:45:11 PM : Failure sending mail.
+09/05/2019 1:52:58 PM : Failure sending mail.
+09/05/2019 1:58:16 PM : Failure sending mail.
+09/05/2019 2:02:57 PM : Failure sending mail.
+09/05/2019 2:20:11 PM : Failure sending mail.
+09/05/2019 2:33:51 PM : Failure sending mail.
+09/05/2019 2:38:34 PM : Failure sending mail.

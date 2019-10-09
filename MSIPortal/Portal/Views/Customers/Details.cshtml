@@ -1,0 +1,260 @@
+﻿@model Portal.Models.Customers
+@*@model Microsoft.Store.PartnerCenter.Models.Customers.Customer*@
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">@Model.CompanyName</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div id="modalLoader" style="display:none;position: absolute; background-color: white; opacity: 0.7; z-index: 1500; width: 100%; height: 100%;border-radius:4px;">
+                <div style="margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%,-50%); transform: translate(-50%,-50%);">
+                   <img src="~/Content/loadingpage.gif" style="width:70px;" />     
+                </div>
+            </div>
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label style="font-weight:300;">Specify the details of the individual at the customer's organization who accepted the <a style="color:dodgerblue" href="https://docs.microsoft.com/en-us/partner-center/agreements">Microsoft Cloud Agreement</a> </label>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="usr">First name <span>*</span></label>
+                            <input class="form-control" id="txtFirstName" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="usr">Last name <span>*</span></label>
+                            <input class="form-control" id="txtLastName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="usr">Email address <span>*</span></label>
+                            <input class="form-control" id="txtEmailAddress" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="usr">Phone number <span>*</span></label>
+                            <input class="form-control" id="txtPhoneNumber" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="usr">Agreement Date <span>*</span></label>
+                            <input class="form-control" type="date" id="txtAgreementDate" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="text-align:left">
+                    <button onclick="mcasubscription(this)" class="btn btn-danger">Save and continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Details</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+                        <h3 class="box-title m-b-0">Company Profile</h3>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Microsoft ID")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.MicrosoftID)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Primary domain name")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.DomainName)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Company name")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.CompanyName)</p>
+                            </div>
+                        </div>
+
+                        <h3 class="box-title m-b-0">Billing Profile</h3>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Last name")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.LastName)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("First name")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.FirstName)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Email address")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.EmailAddress)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayNameFor(model => model.Country)</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Country)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Special Qualification</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.SpecialQualifications.Name)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Address line 1")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.AddressLine1)</p>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayNameFor(model => model.City)</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.City)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("ZIP/Postal code")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.ZipPostal)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Phone number")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.PhoneNumber)</p>
+                            </div>
+                        </div>
+
+                        <h3 class="box-title m-b-0">Microsoft cloud agreement <a data-toggle="modal" data-target="#myModal" href="#" style="padding-left:10px;text-decoration:none;color:dodgerblue;text-transform:capitalize;font-weight:300" >Update</a> </h3>
+                           <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayName("Accepted by")</label>
+                            <div class="col-5">
+                                <p class="form-control-static">
+                                    <label style="font-weight:300">@ViewBag.MCADateAgreed</label><br />
+                                    <label style="font-weight:300">@ViewBag.MCAName</label><br />
+                                    <label style="font-weight:300">@ViewBag.MCAEmail</label><br />
+                                    <label style="font-weight:300">@ViewBag.MCAPhoneNumber</label>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9">
+                                <a href="@Url.Action("Index")" class="btn btn-inverse">Back</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+<script>
+
+    var MCASubscriptions = '@Url.Action("MicrosoftCloudAgreement", "Customers")';
+
+    function mcasubscription(e) {
+
+        var strFirstName = document.getElementById("txtFirstName").value;
+        var strLastName = document.getElementById("txtLastName").value;
+        var strEmailAddress = document.getElementById("txtEmailAddress").value;
+        var strPhoneNumber = document.getElementById("txtPhoneNumber").value;
+        var strAgreementDate = document.getElementById("txtAgreementDate").value;
+        var CustomerId = @ViewBag.CID;
+
+        
+        document.getElementById("modalLoader").style.display = "block"; 
+
+         $.ajax({
+            traditional: true,
+            type: 'post',
+            datatype: 'html',
+             data: { FirstName: strFirstName, LastName: strLastName, EmailAddress: strEmailAddress, PhoneNumber: strPhoneNumber, AgreementDate: strAgreementDate, CID: CustomerId },
+            url: MCASubscriptions,
+            cache: true,
+            success: function (request) {
+          
+                console.log(request + "|" + CustomerId);
+                //@ViewBag.TokenStatus = request;
+            },
+            error: function (e) {
+                console.log(e);
+                document.getElementById("modalLoader").style.display = "none"; 
+            },
+            complete: function (e) {
+                alert("Microsoft cloud agreement updated!")
+                
+                document.location.reload();
+               
+
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(3) a').addClass("active");
+
+    });
+</script>
+
+

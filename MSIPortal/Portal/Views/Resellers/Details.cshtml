@@ -1,0 +1,150 @@
+﻿@model Portal.Models.ResellerAccount
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Resellers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Details</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">MPN ID</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Reseller.MPNID)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Reseller Name</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Reseller.ResellerName)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.DisplayNameFor(model => model.Reseller.Emails)</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Reseller.Emails)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Reseller Status</label>
+                            <div class="col-5">
+                                @ViewBag.Status
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Username</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.User.username)</p>
+                            </div>
+                        </div>
+                        @if (ViewBag.UserType != "Admin")
+                        {
+                        <div id='divAuthorizedRep'>
+
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Company Name</label>
+                                <div class="col-5">
+                                    <p class="form-control-static">@Html.DisplayFor(model => model.Reseller.CompanyName)</p>
+                                </div>
+                            </div>
+
+
+                            <div class="well" style="background:#e4e7ea !important;">
+
+                                <h3 class="box-title m-b-0">Primary Contact</h3>
+                                @* Authorized Representative *@
+
+                                <label id="RequestMessage"></label>
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Email Address</label>
+                                    <div class="col-5">
+                                        <p class="form-control-static">@Html.DisplayFor(model => model.AuthorizedRepresentative.EmailAddress)</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">First Name</label>
+                                    <div class="col-5">
+                                        <p class="form-control-static">@Html.DisplayFor(model => model.AuthorizedRepresentative.FirstName)</p>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Last Name</label>
+                                    <div class="col-5">
+                                        <p class="form-control-static">@Html.DisplayFor(model => model.AuthorizedRepresentative.LastName)</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-2 col-form-label">Contact No</label>
+                                    <div class="col-5">
+                                        <p class="form-control-static">@Html.DisplayFor(model => model.AuthorizedRepresentative.ContactNo)</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            </div>
+
+                           
+
+                         
+                            
+                        }
+
+
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9">
+                                 @if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5)
+                                        || Portal.Helpers.Sessions.UserTypeID == 1)
+                                 {
+                                <a href="@Url.Action("Edit", new { id = Model.Reseller.ResellerID })" class="btn btn-danger">Edit</a>
+                                 }
+                                @if (Portal.Helpers.Sessions.UserType.ToString() == "Admin")
+                                {
+                                    <a href="@Url.Action("Index")" class="btn btn-inverse">Back</a>
+                                }
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+<script>
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(2) a').addClass("active");
+
+    });
+</script>

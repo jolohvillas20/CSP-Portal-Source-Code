@@ -1,0 +1,141 @@
+﻿@*@model IEnumerable<Microsoft.Store.PartnerCenter.Models.Orders.Order>*@
+@model IPagedList<Portal.Models.CustomerOrders>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Orders</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="white-box">
+
+    @using (Html.BeginForm())
+    {
+        <div class="row ToolsHolder">
+            <div class="col-2">
+                <a href="@Url.Action("Create")" class="btn btn-danger">Create New</a>
+            </div>
+
+            <label class="col-sm-1">Date From</label>
+            <div class="col-sm-2">
+                <input type="text" name="DateFrom" class="mydatepicker form-control" value="@ViewBag.DateFrom" placeholder="mm/dd/yyyy" />
+            </div>
+
+            <label class="col-sm-1">Date To</label>
+            <div class="col-sm-2">
+                <input type="text" name="DateTo" class="mydatepicker form-control" value="@ViewBag.DateTo" placeholder="mm/dd/yyyy" />
+            </div>
+
+            <div class="col-3">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+            </div>
+            <div class="col-1 no-padding">
+                <input type="submit" value="Search" class="btn btn-danger" />
+            </div>
+            @*<div class="col-1 no-padding">
+                <a href="@Url.Action("Refresh")" class="btn btn-inverse">Refresh</a>
+            </div>*@
+        </div>
+    }
+    @*search*@
+
+    <div class="table-responsive">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Customer")
+                    </th>
+                    @*<th>
+                        @Html.DisplayName("Order Id")
+                    </th>*@
+                    
+                    <th>
+                        @Html.DisplayName("Creation Date")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Billing Cycle")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Items")
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+               @foreach (var item in Model)
+               {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Orders.CustomersID)</td>
+                    @*<td>@Html.DisplayFor(modelItem => item.Id)</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.Orders.CreationDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Orders.BillingCycle)</td>
+                  
+
+
+                    <td>
+                        @foreach (var line in item.OrderItems)
+                {
+                            <div>
+                                @*<b>Line Item Number:</b> @Html.DisplayFor(modelItem => line.LineItemNumber)<br />*@
+                                <b>Offer ID:</b> @Html.DisplayFor(modelItem => line.OffersID)<br />
+                                <b>Offer Name:</b> @Html.DisplayFor(modelItem => line.Offers.Name)<br />
+                                <b>Subscription ID:</b> @Html.DisplayFor(modelItem => line.SubscriptionID)<br />
+                                <b>Friendly Name:</b> @Html.DisplayFor(modelItem => line.FriendlyName)<br />
+                                <b>Quantity:</b> @Html.DisplayFor(modelItem => line.Quantity)<br />
+                            </div>
+                       
+                            <br />
+
+                        }
+                    </td>
+                </tr>
+
+                @*<tr>
+                        <td>@Html.DisplayFor(modelItem => item.OfferName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FriendlyName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Quantity) @Html.DisplayFor(modelItem => item.UnitType)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BillingCycle)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PartnerId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+                    </tr>*@
+               }
+            </tbody>
+        </table>
+        <!-- pager -->
+
+        <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+
+        <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+             new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+        
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(5) a').addClass("active");
+
+    });
+
+</script>

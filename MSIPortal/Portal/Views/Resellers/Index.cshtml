@@ -1,0 +1,180 @@
+﻿@*@model IEnumerable<Portal.Models.Resellers>*@
+@model IPagedList<Portal.Models.Resellers>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Reseller";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Resellers</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="white-box">
+    @*<h3 class="box-title">&nbsp;</h3>*@
+
+
+    @using (Html.BeginForm())
+    {
+        <div class="row ToolsHolder">
+            <div class="col-3">
+                @if (Portal.Helpers.Sessions.UserTypeID == 1)
+                {
+                    <a href="@Url.Action("Create")" class="btn btn-danger">Create New</a>
+                }
+                @if (Portal.Helpers.Sessions.UserTypeID == 1 || Portal.Helpers.Sessions.UserTypeID == 4)
+                {
+                    <a href="@Url.Action("PendingAccounts")" class="btn btn-danger">Approval List</a>
+                }
+            </div>
+
+
+            @*<label class="col-sm-1 offset-1">User type</label>
+                <div class="col-3">
+                    @Html.DropDownList("UserType", new List<SelectListItem>
+                    {
+                    new SelectListItem{ Text="Admin", Value = "1" },
+                   new SelectListItem{ Text="Sales AE", Value = "2" },
+                    new SelectListItem{ Text="PA", Value = "3" },
+                    new SelectListItem{ Text="PM", Value = "4" }
+                        }, new { @class = "form-control" })
+                </div>*@
+
+            <div class="col-3 ">
+                @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter, new { @class = "form-control", @placeholder = "find" })
+            </div>
+
+            <div class="col-1 no-padding">
+                <input type="submit" value="Search" class="btn btn-danger" />
+            </div>
+        </div>
+    }
+
+    <div class="table-responsive tbl-reseller">
+        <table class="table color-bordered-table inverse-bordered-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.ActionLink("MPN ID", "Index", new { sortColumn = "mpnid", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Reseller Name", "Index", new { sortColumn = "resellername", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+
+                    </th>
+                    <th>
+                        @Html.ActionLink("Emails", "Index", new { sortColumn = "emails", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Account Status", "Index", new { sortColumn = "resellerstatus", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Reseller Status", "Index", new { sortColumn = "isapprove", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Approved By", "Index", new { sortColumn = "approvedby", sortOrder = ViewBag.SortOrder, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.Users.username)
+                        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MPNID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ResellerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Emails)
+                            </td>
+                            <td>
+                                @if (item.ResellerStatus == 1)
+                                {<label> Active</label> }
+                                else if (item.ResellerStatus == 0)
+                                {<label> Inactive</label> }
+                                else
+                                {<label> On Hold</label>}
+                                @*@Html.DisplayFor(modelItem => item.ResellerStatus)*@
+                            </td>
+                            <td>
+                                @if (item.IsApprove == true)
+                                {<label> Approved</label> }
+                                else if (item.IsApprove == false)
+                                {<label> Not Approved</label>}
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Users.FirstName)  @Html.DisplayFor(modelItem => item.Users.LastName)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Users.username)
+                                </td>*@
+                            <td class="text-center">
+                                @if ((Portal.Helpers.Sessions.ResellerStatus == 1 && Portal.Helpers.Sessions.UserTypeID == 5) || Portal.Helpers.Sessions.UserTypeID == 1)
+                                {
+
+                                    <a href="@Url.Action("Edit", new { id = item.ResellerID })" data-toggle="tooltip" data-original-title="Edit" class="btn btn-success btn-xs btn-1f">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                }
+
+
+                                @*<a href="@Url.Action("Delete", new { id = item.ResellerID })" data-toggle="tooltip" data-original-title="Delete" class="btn btn-warning btn-xs btn-1f">
+                                        <i class="fa fa-remove"></i>
+                                    </a>*@
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <h4> @TempData["Message"].ToString()</h4>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- pager -->
+        @if (Model != null)
+        {
+            <div class="col-md-4 col-sm-12 no-padding pull-left" style="margin:20px 0px;">
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            </div>
+
+            <div class="col-md-8 col-sm-12 no-padding pull-left" style="text-align:right;">
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+              new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(2) a').addClass("active");
+
+    });
+
+</script>

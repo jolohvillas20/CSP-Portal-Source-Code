@@ -1,0 +1,596 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Order</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading"> Create</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.Label("Customer:")</label>
+                            <div class="col-5">
+                                @Html.Editor("CustomerName", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.Hidden("CustomerID")
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.Label("Offer:")</label>
+                            <div class="col-5">
+                                @Html.Editor("OfferName", new { htmlAttributes = new { @class = "form-control OfferName" } })
+                                @Html.Hidden("OfferID")
+                                @Html.Hidden("OfferSalesGroup")
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.Label("Friendly Name:")</label>
+                            <div class="col-5">
+                                @Html.Editor("FriendlyName", new { htmlAttributes = new { @class = "form-control " } })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.Label("Quantity:")</label>
+                            <div class="col-5">
+                                @Html.Editor("Quantity", new { htmlAttributes = new { @class = "form-control number", @value = "1" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">@Html.Label("Reseller:")</label>
+                            <div class="col-5">
+                                @Html.Editor("ResellerName", new { htmlAttributes = new { @class = "form-control " } })
+                                @Html.Hidden("ResellerID")
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9">
+                                <input type="button" value="Add Order" class="btn btn-danger" id="btnAddItem" />
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <h3 class="box-title m-b-0">Items</h3>
+
+                    <div class="table-responsive">
+                        <table id="tblItems" class="table color-bordered-table inverse-bordered-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Offer</th>
+                                    <th>Friendly Name</th>
+                                    <th>Quantity</th>
+                                    <th>Reseller</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+
+
+                        <div class="form-group m-b-10">
+                            <div class="col-sm-12">
+                                <input type="button" value="Save" class="btn btn-danger pull-right" id="btnSaveOrder" />
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+
+
+<script>
+    //check if reseller
+    $(document).ready(function () {
+        $(".preload").show();
+        CheckUser();
+
+    });
+    function CheckUser() {
+        if ("@Portal.Helpers.Sessions.UserType" != "admin") {
+
+            $('#ResellerName').prop('disabled', true);
+            $('#ResellerName').val("@ViewBag.RName");
+            $('#ResellerID').val("@ViewBag.RID");
+        }
+    }
+
+    //AUTOCOMPLETE
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(5) a').addClass("active");
+
+        $("#CustomerID").val("");
+
+        $("#CustomerName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Customers/GetCustomersName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        $("#CustomerID").val("");
+                        $(".preload").hide();
+
+                        response($.map(data, function (item) {
+                            return { label: item.CustomerName, value: item.CustomerName, id: item.ID };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+                        $("#CustomerID").val("");
+                        $(".preload").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                    $("#CustomerID").val("");
+                    $(".preload").hide();
+
+                }
+            }
+        });
+
+        $('#CustomerName').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+            var name = ui.item.value;
+            var id = ui.item.id;
+
+            $("#CustomerName").val(name);
+            $("#CustomerID").val(id);
+
+            $(".preload").show();
+            $.ajax({
+                url: "/Offers/GetOffersName",
+                type: "POST",
+                dataType: "json",
+                data: {},
+                data: { OffersName: "", customerID: $("#CustomerID").val() },
+                success: function (data) {
+                    $("#OfferID").val("");
+                    $("#OfferSalesGroup").val("");
+                    $(".preload").hide();
+                    $("#OfferID").val("");
+                    $("#OfferSalesGroup").val("");
+                    $("#OfferName").val("");
+
+                    //if (data == "error") {
+                    //    alert("Invalid customer/ no offers found.");
+                    //}
+                    //else {
+                    //    response($.map(data, function (item) {
+                    //        return { label: item.OfferName, value: item.OfferName, id: item.ID, SalesGroupId: item.SalesGroupId };
+
+                    //    }))
+                    //}
+
+                },
+                error: function (xhr, acc, errorThrown) {
+                    alert(errorThrown);
+                    $("#OfferID").val("");
+                    $("#OfferSalesGroup").val("");
+                    $(".preload").hide();
+
+                }
+
+            })
+
+
+        });
+
+    })
+
+    $(document).ready(function () {
+        $("#OfferID").val("");
+        $("#OfferSalesGroup").val("");
+
+
+        $("#OfferName").autocomplete({
+            source: function (request, response) {
+                //$(".preloader").show();
+                $.ajax({
+                    url: "/Offers/GetOffersName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { OffersName: request.term, customerID: $("#CustomerID").val() },
+                    success: function (data) {
+                        $("#OfferID").val("");
+                        $("#OfferSalesGroup").val("");
+                        $(".preloader").hide();
+
+                        if (data == "error") {
+                            alert("Invalid customer/ no offers found.");
+                        }
+                        else {
+                            response($.map(data, function (item) {
+                                return { label: item.OfferName, value: item.OfferName, id: item.ID, SalesGroupId: item.SalesGroupId };
+
+                            }))
+                        }
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+                        $("#OfferID").val("");
+                        $("#OfferSalesGroup").val("");
+                        $(".preloader").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                    $("#OfferID").val("");
+                    $("#OfferSalesGroup").val("");
+                    $(".preloader").hide();
+
+
+                }
+            }
+        });
+
+        $('#OfferName').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+            var name = ui.item.value;
+            var id = ui.item.id;
+            var sGrp = ui.item.SalesGroupId;
+
+            $("#OfferName").val(name);
+            $("#OfferID").val(id);
+            $("#OfferSalesGroup").val(sGrp);
+
+
+
+        });
+
+    })
+
+    $(document).ready(function () {
+        $("#ResellerID").val("");
+        CheckUser();
+
+        $("#ResellerName").autocomplete({
+            source: function (request, response) {
+                //$(".preloader").show();
+                $.ajax({
+                    url: "/Resellers/GetResellersName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {},
+                    data: { ResellersName: request.term },
+                    success: function (data) {
+                        $("#ResellerID").val("");
+                        $(".preloader").hide();
+
+                        response($.map(data, function (item) {
+                            return { label: item.ResellerName, value: item.ResellerName, id: item.ID };
+
+                        }))
+
+                    },
+                    error: function (xhr, acc, errorThrown) {
+                        alert(errorThrown);
+                        $("#ResellerID").val("");
+                        $(".preloader").hide();
+
+                    }
+
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                    $("#ResellerID").val("");
+                    $(".preloader").hide();
+
+
+                }
+            }
+        });
+
+        $('#ResellerName').on('autocompleteselect', function (e, ui) {
+            e.preventDefault();
+            var name = ui.item.value;
+            var id = ui.item.id;
+
+            $("#ResellerName").val(name);
+            $("#ResellerID").val(id);
+
+        });
+
+    })
+
+    //NUMBER - QUANTITY
+    var checking = function (event) {
+        var data = this.value;
+        if ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0) {
+
+        } else
+            event.preventDefault();
+    };
+
+    function addListener(list) {
+        for (var i = 0; i < list.length; i++) {
+            list[i].addEventListener('keypress', checking);
+        }
+    }
+    var classList = document.getElementsByClassName('number');
+    addListener(classList);
+
+
+    //ADD ITEM
+    $(document).ready(function () {
+        $('#btnAddItem').click(function (e) {
+
+            e.preventDefault();
+
+
+            var cusName = $('#CustomerName').val();
+            var cusID = $('#CustomerID').val();
+
+            var offerName = $('#OfferName').val();
+            var offerID = $('#OfferID').val();
+            var offerSalesGroup = $('#OfferSalesGroup').val();
+
+            var friendlyName = $('#FriendlyName').val();
+            var qty = $('#Quantity').val();
+
+            var resellerID = $('#ResellerID').val();
+            var resellerName = $('#ResellerName').val();
+
+            //alert(cusName);
+
+
+            //validate if valid
+            var order = new Object();
+            order.cusName = $('#CustomerName').val();
+            order.cusID = $('#CustomerID').val();
+
+            order.offerName = $('#OfferName').val();
+            order.offerID = $('#OfferID').val();
+
+            order.friendlyName = $('#FriendlyName').val();
+            order.qty = $('#Quantity').val();
+
+            order.resellerID = $('#ResellerID').val();
+            order.resellerName = $('#ResellerName').val();
+
+            //order.Item = GetItems();
+            var err = ValidateItem(order);
+            if (err != "") {
+                alert(err);
+
+                return;
+            }
+
+
+            //VALID
+            $('#tblItems  > tbody:last-child').append(
+                   // '<tr>'// need to change closing tag to an opening `<tr>` tag.
+                   '<tr class="item-row">'
+                    + '<td style="display:none;">' + '<input id="ItmCustomerID" name="ItmCustomerID" type="text" value=' + cusID + '> </td>'
+                    + '<td style="display:none;">' + '<input id="ItmOfferID" name="ItmOfferID" type="text" value=' + offerID + '> </td>'
+                    + '<td style="display:none;">' + '<input id="ItmResellerID" name="ItmResellerID" type="text" value=' + resellerID + '> </td>'
+                    + '<td style="display:none;">' + '<input id="ItmOfferSalesGroup" name="ItmOfferSalesGroup" type="text" value=' + offerSalesGroup + '> </td>'
+
+                    + '<td>' + '<input id="ItmCustomerName" name="ItmCustomerName" type="text" value=' + cusName + '> </td>'
+                    + '<td>' + '<input id="ItmOfferName" name="ItmOfferName" type="text" value=' + offerName + '> </td>'
+                    + '<td>' + '<input id="ItmFriendlyName" name="ItmFriendlyName" type="text" value=' + friendlyName + '> </td>'
+                    + '<td>' + '<input id="ItmQuantity" name="ItmQuantity" type="text" value=' + qty + '> </td>'
+                    + '<td>' + '<input id="ItmResellerName" name="ItmResellerName" type="text" value=' + resellerName + '> </td>'
+
+                    + '<td><button id="btnRemove" class="btnRemoveItem">remove</button></td>'
+                    + '</tr>');
+
+            ClearItems();
+
+        });
+    });
+
+    //REMOVE ITEM
+    $(document).ready(function () {
+        $(document).on('click', '.btnRemoveItem', function () {
+            var $row = $(this).closest("tr");
+            $row.fadeOut("fast", function () {
+                $row.remove();
+            })
+        });
+    });
+
+    //VALIDATE ITEM
+    function ValidateItem(itm) {
+        var err = "";
+        if (itm.cusName == "") {
+            err = "Customer Name is required.";
+        }
+        else if (itm.cusID == "") {
+            err = "Customer Name is invalid.";
+        }
+
+        else if (itm.offerName == "") {
+            err = "Offer is required.";
+        }
+
+        else if (itm.offerID == "") {
+            err = "Offer is invalid.";
+        }
+
+        else if (itm.friendlyName == "") {
+            err = "Friendly name is required.";
+        }
+        else if (itm.qty == "") {
+            err = "Quantity is required.";
+        }
+        else if (itm.qty == "0") {
+            err = "Quantity is invalid.";
+        }
+
+        else if (itm.resellerName == "") {
+            err = "Reseller is required.";
+        }
+        else if (itm.resellerID == "") {
+            err = "Reseller is invalid.";
+        }
+
+
+        //else if (ship.Item.length == 0) {
+        //    err = "Please add item/s.";
+        //}
+
+
+        return err;
+    }
+
+    //CLEAR ITEMS
+    function ClearItems() {
+        $('#CustomerName').val("");
+        $('#CustomerID').val("");
+
+        $('#OfferName').val("");
+        $('#OfferID').val("");
+        $('#OfferSalesGroup').val("");
+
+        $('#FriendlyName').val("");
+        $('#Quantity').val("");
+
+        $('#ResellerID').val("");
+        $('#ResellerName').val("");
+        CheckUser();
+    }
+
+
+
+    //SAVE
+    $(document).ready(function () {
+        $('#btnSaveOrder').click(function (e) {
+
+            e.preventDefault();
+
+            //VALIDATE
+            var order = new Object();
+            order.Items = GetItems();
+
+            if (GetItems().length == 0) {
+                alert("Please add item/s.");
+
+                return;
+            }
+
+            //alert(JSON.stringify(order));
+            $('#btnSaveOrder').prop('disabled', true);
+            $(".preload").show();
+
+            $.ajax({
+                url: "/Orders/Save",
+                type: "POST",
+                data: JSON.stringify(order),
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    if (r == "success") {
+                        alert("Successfully created order.");
+                        window.location.href = "/Orders/Create"
+                        $(".preload").hide();
+
+                    }
+                    else {
+
+                        alert('Failed to create order: ' + r);
+                        $('#btnSaveOrder').prop('disabled', false);
+                        $(".preload").hide();
+
+                        return;
+                    }
+                },
+                error: function (xhr, acc, errorThrown) {
+                    alert('Failed to create order: ' + errorThrown);
+                    $('#btnSaveOrder').prop('disabled', false);
+                    $(".preload").hide();
+
+                    return;
+                }
+            });
+
+
+        })
+    });
+
+
+    //GET ITEMS
+    function GetItems() {
+        var lstItem = new Array();
+
+        $("tr.item-row").each(function () {
+            $this = $(this);
+
+            var item = new Object();
+            item.CustomerID = $this.find("#ItmCustomerID").val();
+            item.OfferID = $this.find("#ItmOfferID").val();
+            item.ResellerID = $this.find("#ItmResellerID").val();
+            item.OfferSalesGroup = $this.find("#OfferSalesGroup").val();
+
+            item.CustomerName = $this.find("#ItmCustomerName").val();
+            item.OfferName = $this.find("#ItmOfferName").val();
+            item.FriendlyName = $this.find("#ItmFriendlyName").val();
+
+            item.Quantity = $this.find("#ItmQuantity").val();
+            item.ResellerName = $this.find("#ItmResellerName").val();
+
+            lstItem.push(item);
+        });
+
+        return lstItem;
+    }
+
+
+</script>

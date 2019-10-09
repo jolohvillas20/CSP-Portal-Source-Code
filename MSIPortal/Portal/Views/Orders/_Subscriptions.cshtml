@@ -1,0 +1,854 @@
+﻿@model IEnumerable<Portal.Models._Categories>
+
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h3 class="box-title m-b-0">Subscription</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="panel-body">
+                <div class="form">
+
+                    @*<input type="text" class="btn btn-default" id="txtText" style="display:block;" />*@
+                    <span id="errMsgSub" style="display:none;"></span>
+
+                    @{int test = 1; }
+
+                   
+
+
+                    <ul class="nav customtab nav-tabs" role="tablist">
+
+                        @foreach (var item in Model)
+                        {
+
+                        <li role="presentation" class="">
+                            <a href="#@item.Category.Replace(" ", "")-li" aria-controls="@item.Category.Replace(" ", "")-li" role="tab" data-toggle="tab" aria-expanded="false" >
+                                <label class="_category hidden">@item.Category.Replace(" ", "")</label>
+                                <span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">
+                                    @Html.DisplayFor(modelItem => item.Category)
+                                    (@Html.Label("lblCount", "0", new { id = item.Category.Replace(" ", "") }))
+                                </span>
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        @foreach (var item in Model)
+                        {
+
+                        <div role="tabpanel" class="tab-pane" id="@item.Category.Replace(" ", "")-li">
+                            <div class="col-sm-12">
+                                <ul class="row SubHolder">
+                                    @foreach (var offer in item.OrderItems)
+                                    {
+                                    <li class="holder col-sm-12" id='holder-@test'>
+                                        <div class="row">
+                                            @Html.HiddenFor(modelItem => offer.OffersID, new { id = "offerid-" + test })
+
+                                            <div class="col-9 SubDesc">
+
+                                                <div class="row">
+
+                                                    <div class="col-9 no-padding SubContent">
+
+                                                        <input type="checkbox" id='@item.Category.Replace(" ", "")-@test' class="chkOffers @item.Category.Replace(" ", "")" @offer.Checked />
+                                                        <span>
+                                                            @Html.DisplayFor(modelItem => offer.Name)
+                                                        </span>
+                                                    </div>
+                                                    <div style="display:none;" id="liLicense" class="liLicense col-3 no-padding">
+                                                        <div id="divUsage-@test" style="display:none;">
+                                                            <span display:inline-block">@offer.UnitType</span>
+                                                        </div>
+
+                                                        <div id="divLicense-@test" style="display:block;">
+                                                            <span style="width:35%; display:inline-block">@offer.UnitType</span>
+                                                            <input type="text" value=@offer.Quantity class="number txtLicenceNo form-control" id='license-@test' style="width:60%; display:inline-block; text-align:right;" />
+                                                            <span id="spanMinimum-@test" style="color:red; display:none;" display:inline-block">Minimum @offer.MinimumQuantity @offer.UnitType</span>
+                                                            <br /><br />
+                                                            <span style="width:35%; display:none;">Price: PHP</span> <!-- &#x20B1;-->
+                                                            <input type="text" value=@offer.ComputedDealersPrice id='txtPrice-@test' class="form-control" disabled="disabled" style="width:60%; display:inline-block; text-align:right;display:none;" />
+                                                            <input type="text" style="display:none;" value=@offer.DealersPrice id='txtPriceOrig-@test' class="col-3 no-padding" />
+                                                            <input type="text" style="display:none;" value=@offer.MinimumQuantity id='txtMinimumQuantity-@test' class="col-3 no-padding" />
+                                                            <input type="text" style="display:none;" value=@offer.UnitType id='UnitType-@test' class="col-3 no-padding" />
+                                                        </div>
+
+                                                      
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+
+                                            <div style="display:none;" id="liDesc" class="liDesc col-3">
+                                                @Html.DisplayFor(modelItem => offer.Description)
+                                            </div>
+
+                                        </div>
+
+                                    </li>
+                                    test++;
+                                    }
+
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        }
+
+
+                    </div>
+                 
+
+
+                    <div class="form-group row" id="divEnterMPNID" style="display:none;">
+                        <div class="col-7">
+                            <input type="text" value="" placeholder="Enter your MPN ID" id="txtMPNID" class="form-control" style="width:50%; display:inline;" />
+
+                            <div style="width:40%; display:inline;">
+                                <input type="button" value="Verify" id="btnVerifyMPNID" class="btn btn-danger btn-sm" />
+                                <input type="button" value="Cancel" id="btnCancelVerify" class="btn btn-inverse btn-sm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="divEnterMPNID" style="display:none;">
+                        <div class="col-7">
+                            <input type="text" value="" placeholder="Enter your MPN ID" id="txtMPNID" class="form-control" style="width:50%; display:inline;" />
+
+                            <div style="width:40%; display:inline;">
+                                <input type="button" value="Verify" id="btnVerifyMPNID" class="btn btn-danger btn-sm" />
+                                <input type="button" value="Cancel" id="btnCancelVerify" class="btn btn-inverse btn-sm" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="divCheckingMPN" style="display:none;">
+                        <div class="col-7">
+                            <i class="fa fa-spinner"></i> checking mpn...
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row" id="divMPNNotExists" style="display:none;">
+                        <div class="col-7">
+                            No record found.
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row" id="divMPNVerified" style="display:none;">
+                        <div class="col-7">
+                            No record found.
+                            <h5>Reseller (MPN ID)</h5>
+                            <h5>@Html.Label("name", new { id = "lblMPNResellerName" }) (@Html.Label("id", new { id = "lblMPNResellerID" })) </h5>
+
+                        </div>
+
+
+                    </div>
+
+                    <div hidden="hidden">
+                        <h4> </h4>
+                        <div style="display:none;">
+                            @Html.Label("lblCount", "false", new { id = "txtIsVatable" })
+                        </div>
+                        Total Price: PHP @Html.Label("lblCount", "0.00", new { id = "txtTotalPrice" }) <br /> <!--&#x20B1;-->
+                        Total Vat: PHP @Html.Label("lblCount", "0.00", new { id = "txtTotalVat" }) <br /> <!--&#x20B1;-->
+                        Total Amount: PHP @Html.Label("lblCount", "0.00", new { id = "txtTotalAmount" }) <br /> <!--&#x20B1;-->
+                    </div>
+
+
+                    <div class="form-group m-b-0">
+                        <div class="offset-sm-2 col-sm-9">
+                            @*<input type="submit" value="Test lng to" class="btn btn-danger" id="btnTest" />*@
+                            <input type="submit" value="Review" class="btn btn-danger" id="btnReview" />
+                            <input type="submit" value="Submit" class="btn btn-danger" id="btnSubmit" style="display:none" />
+                            <input type="button" value="Cancel" class="btn btn-inverse" id="btnCancel" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        var strReviewLink = '@Url.Action("Review", "Orders")';
+
+        $('#btnReview').click(function () {
+
+            $(".preload").show();
+
+            $('#errMsgSub').attr("style", "display:none;");
+
+
+            //VALIDATE CUSTOMER
+            var cName = $('#CustomerName').val();
+            var cID = $('#CustomerID').val();
+
+
+            if (cName == "") {
+                alert('Customer Name is required!.');
+                $('#CustomerName').focus();
+                return;
+            }
+            else if (cID == "") {
+                alert('Customer Name is invalid.');
+                $('#CustomerName').focus();
+                return;
+            }
+
+
+
+            //VALIDATE SUBSCRIPTION
+            var check = $('.chkOffers:checked').length;
+
+            if (check < 1) {
+                //$('#errMsgSub').attr("style", "display:block;");
+                alert('Please add subscription.');
+                return;
+            }
+            else { $('#errMsgSub').attr("style", "display:none;"); }
+
+
+
+            //VALIDATE RESELLER
+            var resell = $('#IResellerID').val();
+            var mpID = $('#lblMPNResellerName').text();
+            var iRes = "";
+
+            if (resell == "") {
+                $('#errMsgSub').attr("style", "display:block;");
+                alert('Select indirect reseller.');
+                $('#IResellerID').focus();
+
+                return;
+            }
+            else if (resell == "enterMPNID") {
+                if (mpID == "" || mpID == "name") {
+                    alert('Invalid indirect reseller.');
+                    $('#lblMPNResellerName').focus();
+
+                    return;
+                }
+                else { iRes = mpID; }
+            }
+            else { iRes = resell; }
+
+
+
+            var custom = new Object();
+            custom.MicrosoftID = cID;
+            custom.IndirectResellerID = iRes;
+            // custom.Billing = billing;
+
+            custom.TotalPrice = RemoveCommas($("#txtTotalPrice").text());
+            custom.TotalVat = RemoveCommas($("#txtTotalVat").text());
+            custom.TotalAmount = RemoveCommas($("#txtTotalAmount").text());
+
+            custom.CustomerSubscriptions = GetSubscriptionItems();
+
+            $('#dv_wait').show();
+
+            $.ajax({
+                traditional: true,
+                type: 'POST',
+                datatype: 'json',
+                data: JSON.stringify(custom),
+                url: strReviewLink,
+                contentType: "application/json; charset=utf-8",
+                cache: true,
+                success: function (request) {
+
+                    window.location = "/Orders/ReviewOrder/";
+
+                    $('#dv_wait').hide();
+                },
+                error: function (e) {
+                    console.log(e);
+                    $('#dv_wait').hide();
+                },
+                complete: function (e) {
+                    console.log(e);
+                    $('#dv_wait').hide();
+                }
+            });
+
+        });
+
+        //check if reseller
+        $(document).ready(function () {
+
+            $('#dv_wait').hide(); 
+
+            var usrtype = '@Portal.Helpers.Sessions.UserType.ToString()';
+
+            //alert($("#txtHiddenReseller").val());
+            $("#IResellerID").val($("#txtHiddenReseller").val());
+            var name = $("#IResellerID option:selected").text();
+            var arr = name.split('(');
+
+            $("#txtIsVatable").text("false");
+            if (arr.length > 1) {
+                if (arr[1].replace(")", "") == "Vatable") {
+                    $("#txtIsVatable").text("true");
+                }
+            }// get if Reseller is VATable
+            
+            //if (usrtype == 'Reseller') {
+            //    ChangeReseller();
+                
+
+            //}
+
+          
+            $('._category').each(function (event) {
+                    
+                var x = $(this).text();
+
+                $('._category').each(function (event){
+
+                    var test = x;
+                    var arr = test.split('-');
+                    $('#' + arr[0]).text($('.' + arr[0] + ':checked').length);
+                
+                });
+     
+            });
+
+            $('.holder').each(function (event) {
+               
+                var sThisVal = $(this).attr('id');
+                
+                if ($('#' + sThisVal + ' .chkOffers').prop("checked"))
+                {
+                    
+                    $('#' + sThisVal + ' #liDesc').show(); //text-2 #liDesc
+                    $('#' + sThisVal + ' #liLicense').show();
+                    $('#' + sThisVal + ' .SubDesc').attr("style", "background:#03a9f3;");
+                    //alert(sThisVal);
+                }
+
+                var test = (this.id);
+                var arr = test.split('-');
+
+                $('#' + arr[0]).text($('.' + arr[0] + ':checked').length);
+
+
+
+                var uType = $("#UnitType-" + arr[1]).val();
+                if (uType == 'Usage-based')
+                {
+                    $("#divUsage-" + arr[1]).attr("style", "display:block;");
+                    $("#divLicense-" + arr[1]).attr("style", "display:none;");
+                }
+                else
+                {
+                    $("#divUsage-" + arr[1]).attr("style", "display:none;");
+                    $("#divLicense-" + arr[1]).attr("style", "display:block;");
+                }
+
+                ComputeTotal();
+            });
+
+            $('#IResellerID').val("@ViewBag.ResellerID");
+          
+        });
+
+
+        $('.nav-tabs li:first-child').addClass('active');
+
+        $('.tab-content div.tab-pane:first-child').addClass('active');
+
+        $('.holder').mouseover(function () {
+
+            var id = (this.id);
+
+            $('#' + id + ' .chkOffers').change(function () {
+                $('.liDesc').hide();
+
+                if ($('#' + id + ' .chkOffers').prop("checked")) {
+                    $('#' + id + ' #liDesc').show(); //text-2 #liDesc
+                    $('#' + id + ' #liLicense').show();
+
+                    $('#' + id + ' .SubDesc').attr("style", "background:#03a9f3;");
+                } else {
+                    $('#' + id + ' #liDesc').hide();
+                    $('#' + id + ' #liLicense').hide();
+                    $('#' + id + ' .SubDesc').attr("style", "background:none;");
+
+                }
+
+                var test = (this.id);
+                var arr = test.split('-');
+
+                $('#' + arr[0]).text($('.' + arr[0] + ':checked').length);
+
+                var uType = $("#UnitType-" + arr[1]).val();
+                if (uType == 'Usage-based') {
+                    $("#divUsage-" + arr[1]).attr("style", "display:block;");
+                    $("#divLicense-" + arr[1]).attr("style", "display:none;");
+                }
+                else {
+                    $("#divUsage-" + arr[1]).attr("style", "display:none;");
+                    $("#divLicense-" + arr[1]).attr("style", "display:block;");
+                }
+                //ComputeVat();
+                ComputeTotal();
+
+            });
+
+        });
+
+
+        //NUMBER - QUANTITY
+        var checking = function (event) {
+            var data = this.value;
+            if ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 0) {
+
+            } else
+                event.preventDefault();
+        };
+
+        function addListener(list) {
+            for (var i = 0; i < list.length; i++) {
+                list[i].addEventListener('keypress', checking);
+            }
+        }
+        var classList = document.getElementsByClassName('number');
+        addListener(classList);
+
+
+        //END NUMBER - QUANTITY
+
+        function ComputeVat() {
+            $('#divEnterMPNID').attr("style", "display:none;");
+            $('#IResellerID option[value=""]').attr("selected", false);
+            $('#divMPNVerified').attr("style", "display:none;");
+            $('#lblMPNResellerName').text("name");
+            $('#txtMPNID').val("");
+
+
+            var rID = $('#IResellerID').val();
+            if (rID == "enterMPNID") {
+                $('#divEnterMPNID').attr("style", "display:block;");
+            }
+            else {
+                var name = $("#IResellerID option:selected").text();
+                var arr = name.split('(');
+
+                $("#txtIsVatable").text("false");
+                if (arr.length > 1) {
+                    if (arr[1].replace(")", "") == "Vatable") {
+                        $("#txtIsVatable").text("true");
+                    }
+                }
+            }
+            ComputeVat();
+            ComputeTotal();
+
+        };
+        function ChangeReseller() {
+            $('#divEnterMPNID').attr("style", "display:none;");
+            $('#IResellerID option[value=""]').attr("selected", false);
+            $('#divMPNVerified').attr("style", "display:none;");
+            $('#lblMPNResellerName').text("name");
+            $('#txtMPNID').val("");
+
+           
+            var rID = $('#IResellerID').val();
+            //alert(rID);
+            if (rID == "enterMPNID") {
+                $('#divEnterMPNID').attr("style", "display:block;");
+            }
+            else {
+                var name = $("#IResellerID option:selected").text();
+                var arr = name.split('(');
+
+                $("#txtIsVatable").text("false");
+                if (arr.length > 1) {
+                    if (arr[1].replace(")", "") == "Vatable") {
+                        $("#txtIsVatable").text("true");
+                    }
+                }
+            }
+           
+            ComputeVat();
+            ComputeTotal();
+        }
+
+        $('#IResellerID').change(function (x) {
+            ChangeReseller();
+        });
+        $('#btnCancelVerify').click(function (e) {
+
+            e.preventDefault();
+            $('#divEnterMPNID').attr("style", "display:none;");
+            $('#IResellerID option[value=""]').attr("selected", true);
+            $('#divMPNVerified').attr("style", "display:none;");
+
+        });
+        //VERIFY MPN ID
+        $('#btnVerifyMPNID').click(function (e) {
+
+            VerifyMPN();
+
+        });
+
+
+        function VerifyMPN() {
+            var name = $('#txtMPNID').val();
+
+
+            if (name == '') {
+                //$(".preload").hide();
+                $("#divCheckingMPN").attr("style", "display:none;");
+                $("#divMPNNotExists").attr("style", "display:none;");
+                $("#divMPNVerified").attr("style", "display:none;");
+
+                return;
+            }
+
+
+            $("#divCheckingMPN").attr("style", "display:block;");
+            $("#divMPNNotExists").attr("style", "display:none;");
+            $("#divMPNVerified").attr("style", "display:none;");
+
+
+            //VERIFY MPN
+            $.ajax({
+                url: '/Customers/VerifyMPNID',
+                data: { mpnID: name },
+                contentType: 'application/html ; charset:utf-8',
+                type: 'GET',
+                dataType: 'html'
+            }).success(function (data) {
+                var data1 = $.parseJSON(data);
+                $("#divCheckingMPN").attr("style", "display:none;");
+
+                //alert(data1);
+                if (data1 == "") {
+                    $("#divMPNNotExists").attr("style", "display:block;");
+                    $("#divMPNVerified").attr("style", "display:none;");
+                    $('#lblMPNResellerName').text("name");
+
+                }
+                else {
+
+                    $("#divMPNNotExists").attr("style", "display:none;");
+                    $("#divMPNVerified").attr("style", "display:block;");
+
+                    //$("label[for = lblMPNResellerName]").text(data1);
+                    //$("label[for = lblMPNResellerID]").text(name);
+
+                    $('#lblMPNResellerName').text(data1);
+                    $('#lblMPNResellerID').text(name);
+
+                }
+
+
+            }).error(function () {
+                //$(".preload").hide();
+                $("#divCheckingMPN").attr("style", "display:none;");
+                $("#divMPNNotExists").attr("style", "display:block;");
+                $("#divMPNVerified").attr("style", "display:none;");
+                $('#lblMPNResellerName').text("name");
+
+            });
+            //END VERIFY MPN
+
+
+        };
+
+
+
+
+        $('#btnCancel').click(function (e) {
+
+            e.preventDefault();
+
+            window.location.href = "/Orders/Index/";
+        });
+
+        $('#btnSubmit').click(function (e) {
+            e.preventDefault();
+            $('#errMsgSub').attr("style", "display:none;");
+
+
+            //VALIDATE CUSTOMER
+            var cName = $('#CustomerName').val();
+            var cID = $('#CustomerID').val();
+
+            if (cName == "") {
+                alert('Customer Name is required!.');
+                $('#CustomerName').focus();
+                return;
+            }
+            else if (cID == "") {
+                alert('Customer Name is invalid.');
+                $('#CustomerName').focus();
+                return;
+            }
+
+
+
+            //VALIDATE SUBSCRIPTION
+            var check = $('.chkOffers:checked').length;
+
+            if (check < 1) {
+                //$('#errMsgSub').attr("style", "display:block;");
+                alert('Please add subscription.');
+                return;
+            }
+            else { $('#errMsgSub').attr("style", "display:none;"); }
+
+
+
+            //VALIDATE RESELLER
+            var resell = $('#IResellerID').val();
+            var mpID = $('#lblMPNResellerName').text();
+            var iRes = "";
+
+            if (resell == "") {
+                $('#errMsgSub').attr("style", "display:block;");
+                alert('Select indirect reseller.');
+                $('#IResellerID').focus();
+
+                return;
+            }
+            else if (resell == "enterMPNID") {
+                if (mpID == "" || mpID == "name") {
+                    alert('Invalid indirect reseller.');
+                    $('#lblMPNResellerName').focus();
+
+                    return;
+                }
+                else { iRes = mpID; }
+            }
+            else { iRes = resell; }
+
+            //var radios = document.getElementsByName('Billing');
+            //var billing = "";
+
+            //for (var i = 0, length = radios.length; i < length; i++) {
+            //    if (radios[i].checked) {
+            //        // do whatever you want with the checked radio
+            //        billing = radios[i].value;
+
+            //        // only one radio can be logically checked, don't check the rest
+            //        break;
+            //    }
+            //}
+
+            //SAVE
+            var custom = new Object();
+            custom.MicrosoftID = cID;
+            custom.IndirectResellerID = iRes;
+           // custom.Billing = billing;
+
+            custom.TotalPrice = RemoveCommas($("#txtTotalPrice").text());
+            custom.TotalVat = RemoveCommas($("#txtTotalVat").text());
+            custom.TotalAmount = RemoveCommas($("#txtTotalAmount").text());
+
+            custom.CustomerSubscriptions = GetSubscriptionItems();
+
+
+            $('#img').show(); //<----here
+            $('#btnSubmit').attr('disabled', 'disabled');
+            $('#btnSubmit').attr("value", "Please wait..");
+
+
+            $.ajax({
+                url: "/Orders/SaveOrder",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify(custom),
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+
+                    if (r == '0') {
+                        alert('Failed to create customer.');
+                        $('#img').hide(); //<----here
+                        $('#btnSubmit').prop('disabled', false);
+                        $('#btnSubmit').attr("value", "Submit");
+                    }
+                    else {
+                        window.location.href = "/Customers/Confirmation/" + r;
+                    }
+                },
+                error: function (xhr, acc, errorThrown) {
+                    alert('Failed to create customer.');
+                    $('#img').hide(); //<----here
+                    $('#btnSubmit').prop('disabled', false);
+                    $('#btnSubmit').attr("value", "Submit");
+
+                }
+            });
+
+        });
+
+        function GetSubscriptionItems() {
+            var lstItem = new Array();
+
+            //GET ITEMS
+
+            $('.chkOffers:checkbox:checked').each(function (event) {
+                var sThisVal = $(this).attr('id');
+                var arr = sThisVal.split('-');
+
+               
+
+                //var offerid = $(".chkOffers:checkbox:checked").siblings('#offerid-' + arr[1]).attr('value');
+                var offerid = $('#offerid-' + arr[1]).val();
+                var licensecnt = $('#license-' + arr[1]).val();
+                var price = $('#txtPrice-' + arr[1]).val();
+
+                //alert(offerid + ' - ' + licensecnt);
+
+                var item = new Object();
+                item.OfferId = offerid;
+                item.LicenseCount = licensecnt;
+                item.Price = RemoveCommas(price);
+
+                lstItem.push(item);
+
+
+
+            });
+            return lstItem;
+
+
+        }
+
+
+        $(".txtLicenceNo").change(function (e) {
+            var lID = (this.id);
+            var arr = lID.split('-');
+
+
+            var cnt = parseFloat(((this.value)));
+
+            var origPrice = $('#txtPriceOrig-' + arr[1]).val();
+            origPrice = parseFloat((origPrice));
+
+            var minQty = $('#txtMinimumQuantity-' + arr[1]).val();
+            //alert(this.value);
+
+            if (this.value == '') {
+                $('#txtPrice-' + arr[1]).val(FormatNumber(origPrice));
+                $("#license-" + arr[1]).val(minQty);
+                $("#spanMinimum-" + arr[1]).attr("style", "display:block; color:red;");
+                ComputeTotal();
+
+                return;
+            }
+
+            //alert('orig: ' + origPrice + ' minqty: ' + minQty + ' count: ' + cnt);
+
+
+            if (origPrice >= 0) {
+                //check minimum license
+               
+                if (minQty > cnt)
+                {
+                    $('#txtPrice-' + arr[1]).val(FormatNumber(origPrice));
+                    $("#license-" + arr[1]).val(minQty);
+                    $("#spanMinimum-" + arr[1]).attr("style", "display:block; color:red;");
+                    ComputeTotal();
+                    return;
+                }
+
+                $("#spanMinimum-" + arr[1]).attr("style", "display:none;");
+
+                var tAmt = origPrice * cnt;
+
+                $('#txtPrice-' + arr[1]).val(FormatNumber(tAmt));
+            }
+            else {
+                //alert("Minimum 1 license.");
+                //$('#txtPrice-' + arr[1]).val(origPrice);
+                //$(".txtLicenceNo").val(minQty);
+
+            }
+
+            ComputeTotal();
+
+
+        });
+
+
+        function ComputeTotal() {
+
+            //txtTotalPrice
+            var totalPrice = 0;
+            var totalVat = 0;
+            var totalAmount = 0;
+
+            $('.chkOffers:checkbox:checked').each(function (event) {
+               
+                var sThisVal = $(this).attr('id');
+
+                var arr = sThisVal.split('-');
+
+                var uType = $("#UnitType-" + arr[1]).val();
+                var cnt = $("#license-" + arr[1]).val();
+
+                if (uType != 'Usage-based') {
+                    var price = $('#txtPriceOrig-' + arr[1]).val();
+                    price = parseFloat(RemoveCommas(price)) * parseFloat(cnt);
+                    if (price > 0) {
+                        totalPrice += price;
+                    }
+                    else {
+                        alert("This product is not ready yet. Please contact your Account Executive.")
+                        $(this).attr('checked', false);
+                        return;
+                    }
+                }
+            });
+
+            var isVat = $("#txtIsVatable").text();
+
+            if (isVat == 'true') {
+                totalVat = parseFloat((totalPrice) * .12);
+            }
+
+            totalAmount = totalPrice + totalVat;
+
+
+            $("#txtTotalPrice").text(FormatNumber(totalPrice));
+            $("#txtTotalVat").text(FormatNumber(totalVat));
+            $("#txtTotalAmount").text(FormatNumber(totalAmount));
+        }
+
+
+        function FormatNumber(x) {
+            x = parseFloat(x).toFixed(2);
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function RemoveCommas(objName) {
+            var lstLetters = objName;
+            var lstReplace = lstLetters.replace(/\,/g, '');
+
+            return lstReplace;
+        }
+
+
+    </script>

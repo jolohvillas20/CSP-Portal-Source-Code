@@ -1,0 +1,571 @@
+﻿@model Portal.Models.ResellerAccount
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutRegister.cshtml";
+}
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<a href="@Url.Action("Login","Home")" style="position:absolute; right:16px; top:16px; font-size:28px;"><i class="fa fa-remove text-primary"></i></a>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+
+    <label id="lblMsg"></label>
+
+    <div class="row">
+
+        <div class="col-sm-5">
+
+            <h3 class="box-title m-b-20">Sign Up</h3>
+            <h3 class="box-title m-b-20">
+                <i>All fields are required</i>
+            </h3>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input type="text" id="txtResellerMPNID" value="@Model.Reseller.MPNID" class="form-control textbox" placeholder="MPN ID" />
+                    </div>
+                </div>
+                <div class="form-group row" id="divCheckingMPN" style="display:none;">
+                    <div class="col-7">
+                        <i class="fa fa-spinner"></i> checking mpn...
+                    </div>
+
+                </div>
+
+                <div class="form-group row" id="divMPNNotExists" style="display:none;">
+                    <div class="col-7">
+                        No record found.
+                    </div>
+                </div>
+
+
+                <div class="form-group row" id="divMPNVerified" style="display:none;">
+                    <div class="col-7">
+                        <i class="fa fa-check"></i> MPN ID verified.
+                    </div>
+                    <h5>@Html.Label("name", new { id = "lblMPNResellerName" }) </h5>
+
+
+                </div>
+
+
+
+
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input type="text" id="txtResellerName" value="@Model.Reseller.ResellerName" class="form-control textbox" placeholder="Reseller Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input type="text" id="txtCompanyName" value="@Model.Reseller.CompanyName" class="form-control" placeholder="Company Name" hidden="hidden" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input type="text" id="txtUserName" value="@Model.User.username" class="form-control textbox" placeholder="Username" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        @*<div id="tags">*@
+                        <input type="text" id="txtResellerEmail" value="@Model.Reseller.Emails" class="form-control textbox" placeholder="Reseller Email" />
+                        @*<input type="text" id="hidden-txtResellerEmail" hidden="hidden"/>*@
+                        @*</div>*@
+                        @*<span class="help-block"> <small><code> * kindly seperate by comma (,) </code></small></span>*@
+                    </div>
+                </div>
+
+
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <input id="btnSubmit" type="submit" value="Submit" class="btn btn-info btn-lg btn-block text-uppercase" />
+                    </div>
+                </div>
+
+
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12 text-center">
+                        <p>Already have an account? <a href="@Url.Action("Login","Home")" class="text-primary m-l-5"><b>Sign In</b></a></p>
+                    </div>
+                </div>
+</div>
+
+        <div class="col-sm-5 offset-1">
+            @* Authorized Representative *@
+            <h3 class="box-title m-b-20">Primary Contact</h3>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" id="txtEmail" value="@Model.AuthorizedRepresentative.EmailAddress" class="form-control textbox" placeholder="Primary Contact Email Address" />
+                    <input type="text" id="txtEmailID" hidden="hidden"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" id="txtFirstName" value="@Model.AuthorizedRepresentative.FirstName" class="form-control textbox" placeholder="First Name" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" id="txtLastName" value="@Model.AuthorizedRepresentative.LastName" class="form-control textbox" placeholder="Last Name" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <input type="text" id="txtContact" value="@Model.AuthorizedRepresentative.ContactNo" class="form-control textbox" placeholder="Contact No" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <h3 class="box-title" style="margin-bottom:0px;">Terms and Conditions</h3>
+                    <div style="border:1px solid #e4e7ea; height:120px; overflow-y:scroll; font-size:10px; padding:8px;">
+                        @Html.Raw(ViewBag.TNC)
+                    </div>
+                    <br />
+                    <input type="checkbox" id="chkAgreeTNC" />
+                    <label style="font-size:12px; display:inline;"> I agree with the terms of service and I adhere to them unconditionally.</label>
+                </div>
+            </div>
+
+            @* *end* Authorized Representative *@
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+}
+
+<script>
+    //VERIFY MPN ID
+    $('#txtResellerMPNID').change(function (e) {
+
+        VerifyMPN();
+
+    });
+
+    function VerifyMPN() {
+        var name = $('#txtResellerMPNID').val();
+
+
+        if (name == '') {
+            //$(".preload").hide();
+            $("#divCheckingMPN").attr("style", "display:none;");
+            $("#divMPNNotExists").attr("style", "display:none;");
+            $("#divMPNVerified").attr("style", "display:none;");
+
+            return;
+        }
+
+
+        $("#divCheckingMPN").attr("style", "display:block;");
+        $("#divMPNNotExists").attr("style", "display:none;");
+        $("#divMPNVerified").attr("style", "display:none;");
+
+
+        //VERIFY MPN
+        $.ajax({
+            url: '/Register/VerifyMPNID',
+            data: { mpnID: name },
+            contentType: 'application/html ; charset:utf-8',
+            type: 'GET',
+            dataType: 'html'
+        }).success(function (data) {
+            var data1 = $.parseJSON(data);
+            $("#divCheckingMPN").attr("style", "display:none;");
+
+            //alert(data1);
+            if (data1 == "") {
+                $("#divMPNNotExists").attr("style", "display:block;");
+                $("#divMPNVerified").attr("style", "display:none;");
+                $('#lblMPNResellerName').text("name");
+
+            }
+            else {
+
+                $("#divMPNNotExists").attr("style", "display:none;");
+                $("#divMPNVerified").attr("style", "display:block;");
+
+                //$("label[for = lblMPNResellerName]").text(data1);
+                //$("label[for = lblMPNResellerID]").text(name);
+
+                $('#lblMPNResellerName').text(data1);
+                $('#lblMPNResellerID').text(name);
+
+            }
+
+
+        }).error(function () {
+            //$(".preload").hide();
+            $("#divCheckingMPN").attr("style", "display:none;");
+            $("#divMPNNotExists").attr("style", "display:block;");
+            $("#divMPNVerified").attr("style", "display:none;");
+            $('#lblMPNResellerName').text("name");
+
+        });
+        //END VERIFY MPN
+
+
+    };
+
+
+</script>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+@*<style>
+        #tags {
+            /*float:left;*/
+            border: 1px solid #e4e7ea;
+            /*padding:5px;*/
+            font-family: Arial;
+        }
+
+            #tags > span {
+                cursor: pointer;
+                display: block;
+                float: left;
+                color: #fff;
+                background: #789;
+                padding: 5px;
+                padding-right: 25px;
+                margin: 4px;
+            }
+
+                #tags > span:hover {
+                    opacity: 0.7;
+                }
+
+                #tags > span:after {
+                    position: absolute;
+                    content: "×";
+                    border: 1px solid;
+                    padding: 2px 5px;
+                    margin-left: 3px;
+                    font-size: 11px;
+                }
+
+            #tags > input {
+                /*background:#eee;*/
+                background: #fff;
+                border: 0;
+                /*margin:4px;
+    padding:7px;*/
+                width: auto;
+            }
+</style>*@
+<script>
+    //$(function(){
+    //    var tags = [];
+    //    // ::: TAGS BOX
+
+    //    $("#tags input").on({
+    //        focusout : function() {
+    //            var txt = this.value.replace(/,/g,''); // allowed characters
+    //            if (txt) $("<span/>", { text: txt.toLowerCase(), insertBefore: this });
+    //            this.value = "";
+    //        },
+    //        keyup : function(ev) {
+    //            // if: comma|enter (delimit more keyCodes with | pipe)
+    //            if (/(188)/.test(ev.which))
+    //            {
+    //                if (this.value.length > 2)
+    //                {
+    //                    var textemail = this.value;
+    //                    tags.push(textemail.replace(/,/g, ''));
+    //                    var _email = tags.join();
+    //                    $("#hidden-txtResellerEmail").val(_email);                    
+    //                }
+    //                $(this).focusout();
+                  
+    //            }
+    //        }
+    //    });
+    //    $('#tags').on('click', 'span', function() {
+    //        //if(confirm("Remove "+ $(this).text() +"?"))
+    //        $(this).remove();
+           
+    //        const index = tags.indexOf($(this).text());
+    //        tags.splice(index, 1);
+
+    //        var _email = tags.join();
+    //        $("#hidden-txtResellerEmail").val(_email);
+    //        alert * ($("#hidden-txtResellerEmail").val());
+        
+           
+    //    });
+
+    //});
+
+    $('#txtUserName').keyup(function () {
+        str = $(this).val();
+        str = str.replace(/\s/g, '');
+        $(this).val(str);
+    })
+
+
+</script>
+
+<script>
+ 
+    $(document).ready(function () {
+
+        //$("#hidden-txtResellerEmail").val($('#txtResellerEmail').val());
+    /////
+    $("#txtEmail").autocomplete({
+
+        source: function (request, response) {
+            $.ajax({
+                url: "/Register/GetAuthorized",
+                type: "POST",
+                dataType: "json",
+                data: {},
+                data: { email: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+
+                        return {
+                            id: item.ID,
+                            label: item.Email,
+                            value: item.Email,
+                            firstname: item.Firstname,
+                            lastname: item.LastName,
+                            contactno: item.Contactno
+                        };
+
+                    }))
+
+                },
+                error: function (xhr, acc, errorThrown) {
+                    alert(errorThrown);
+
+                    $(".preload").hide();
+
+                }
+
+            })
+        },
+        messages: {
+            noResults: "",
+            results: function (count) {
+                return count + (count > 1 ? ' results' : ' result ') + ' found';
+
+                $(".preload").hide();
+
+            }
+        }
+    });
+
+    $('#txtEmail').on('autocompleteselect', function (e, ui) {
+        e.preventDefault();
+        
+        $("#txtEmailID").val(ui.item.id);
+        $("#txtEmail").val(ui.item.label);
+        $("#txtFirstName").val(ui.item.firstname);
+        $("#txtLastName").val(ui.item.lastname);
+        $("#txtContact").val(ui.item.contactno);
+
+        $('#txtFirstName').css({ "border": "unset" });
+        $('#txtLastName').css({ "border": "unset" });
+        $('#txtContact').css({ "border": "unset" });
+    });
+
+    })
+
+
+    $('#btnSubmit').click(function (event) {
+        event.preventDefault();
+
+       
+        var _variable = Validate();
+        if (_variable == "passed")
+        {
+
+        var chkAgreeTNC = $('input[id="chkAgreeTNC"]:checked').length > 0;
+      
+        if (chkAgreeTNC == false)
+        {
+            alert('Please accept the terms of service before the next step.');
+            return;
+        }
+
+        var Reseller = new Object();
+        Reseller.MPNID = $('#txtResellerMPNID').val();
+        Reseller.ResellerName = $('#txtResellerName').val();
+        Reseller.username = $('#txtUserName').val();
+        Reseller.Emails =  $('#txtResellerEmail').val();
+        //alert($("#hidden-txtResellerEmail").val());
+        Reseller.CompanyName = $('#txtCompanyName').val();
+
+        //-- Authorized Representative
+        Reseller.repID = $('#txtEmailID').val();
+        Reseller.FirstName = $('#txtFirstName').val();
+        Reseller.LastName = $('#txtLastName').val();
+        Reseller.ContactNo = $('#txtContact').val();
+        Reseller.EmailAddress = $('#txtEmail').val();
+
+     
+            //-- Authorized Representative
+        Reseller.repID = $('#txtEmailID').val();
+        Reseller.FirstName = $('#txtFirstName').val();
+        Reseller.LastName = $('#txtLastName').val();
+        Reseller.ContactNo = $('#txtContact').val();
+        Reseller.EmailAddress = $('#txtEmail').val();      
+      
+            $.ajax({
+                url: "/Register/CheckValidEmail",
+                type: "POST",
+                data: JSON.stringify(Reseller),
+                contentType: "application/json; charset=utf-8",
+                success: function (r) {
+                    var Msg = r;
+                    $(".preload").show();
+                    if (Msg == 'okay') {
+                        $.ajax({
+                            url: "/Register/Save",
+                            type: "POST",
+                            data: JSON.stringify(Reseller),
+                            contentType: "application/json; charset=utf-8",
+                            success: function (r) {
+                                $(".preload").hide();
+                                alert("Welcome to WSI Portal, Please Check your Email");
+                                window.location.href = "/Home/Login";
+                            }
+                        });
+                    }
+                    else {
+                        $('#lblMsg').text(Msg);
+                        $(".preload").hide();
+                    }
+                }
+            });
+        }
+
+
+
+    });
+
+    function Validate()
+    {
+        var mpID = $('#lblMPNResellerName').text();
+        var _passed;
+        //txtEmail
+      
+         if ($('#txtResellerName').val() == '') {
+             $('#txtResellerName').css({ "border": "1px solid red" })
+             // alert('a');
+            
+        }
+        else if ($('#txtUserName').val() == '') {
+            $('#txtUserName').css({ "border": "1px solid red" })
+        }
+        else if ($('#txtResellerEmail').val() == '') {
+            $('#txtResellerEmail').css({ "border": "1px solid red" })
+        }
+        else if ($('#txtEmail').val() == '') {
+            $('#txtEmail').css({ "border": "1px solid red" })
+        }
+        else if ($('#txtFirstName').val() == '') {
+            $('#txtFirstName').css({ "border": "1px solid red" })
+        }
+        else if ($('#txtLastName').val() == '') {
+            $('#txtLastName').css({ "border": "1px solid red" })
+        }
+        else if ($('#txtContact').val() == '') {
+            $('#txtContact').css({ "border": "1px solid red" })
+        }
+        else if (mpID == "" || mpID == "name") {
+            $('#txtResellerMPNID').css({ "border": "1px solid red" })
+            _passed = '2';
+        }
+        else if($('.textbox').val() != '')
+        {
+            $('.textbox').css({ "border": "unset" })
+            _passed = "passed";
+        }
+
+        else
+            _passed = "passed";
+         //alert(_passed);
+         $('.textbox').each(function () {
+
+             if ($(this).val() == '') {
+                 $(this).css({ "border": "1px solid red" })
+                 _passed = '1';
+                 //alert('test');
+             }
+
+
+         });
+        
+        return _passed;
+          
+    }
+
+    $('#txtResellerMPNID').keyup(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtResellerName').keyup(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtUserName').keyup(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtResellerEmail').keyup(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtEmail').change(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtFirstName').change(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtLastName').change(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+    $('#txtContact').change(function () {
+        if ($(this).val() != '') {
+            $(this).css({ "border": "unset" })
+        }
+    })
+   
+</script>

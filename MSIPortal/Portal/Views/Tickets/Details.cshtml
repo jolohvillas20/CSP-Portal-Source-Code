@@ -1,0 +1,105 @@
+﻿@model Portal.Models.ResellerTicket
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Tickets</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Details</div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <div class="form">
+
+                        @if (Portal.Helpers.Sessions.UserID.ToString() == "1")
+                        {
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">From</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.SenderName) @Html.DisplayFor(model => model.MPNID)</p>
+                            </div>
+                        </div>
+
+                        }
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Title</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Ticket.Title)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Description</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Ticket.Description)</p>
+                            </div>
+                        </div>
+
+                      
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Status</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Ticket.Status)</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label">Ticket Date</label>
+                            <div class="col-5">
+                                <p class="form-control-static">@Html.DisplayFor(model => model.Ticket.TicketDate)</p>
+                            </div>
+                        </div>
+
+
+                        @if (Portal.Helpers.Sessions.UserID.ToString() == "1")
+                        {
+
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9">
+                                <a href="@Url.Action("Edit", new { id = Model.Ticket.TicketID })" class="btn btn-danger">Edit</a>
+                                <a href="@Url.Action("Admin")" class="btn btn-inverse">Back</a>
+                            </div>
+                        </div>
+                        }
+                        else
+                        {
+
+                        <div class="form-group m-b-0">
+                            <div class="offset-sm-2 col-sm-9">
+                                <a href="@Url.Action("Index")" class="btn btn-inverse">Back</a>
+                            </div>
+                        </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--./row-->
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(5) a').addClass("active");
+
+    });
+
+</script>

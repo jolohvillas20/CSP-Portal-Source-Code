@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "CustomerNotFound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var strCustomerName = ViewData["CustomerNotFoundName"];
+    var strCustomerMicrosoftId = ViewData["CustomerNotFoundMicrosoftId"];
+}
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Customer Not Found</h4>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+
+    <div class="white-box" style="width:100%;">
+        <div class="col-md-12">
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <th style="width:35%">Microsoft Id</th>
+                        <th style="width:75%">Company</th>
+                    </tr>
+                    <tr>
+                        <td style="width:35%">@strCustomerMicrosoftId</td>
+                        <td style="width:75%">@strCustomerName</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+           
+

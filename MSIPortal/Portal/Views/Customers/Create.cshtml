@@ -1,0 +1,153 @@
+﻿@model Portal.Models.CustomerOffers
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@*@using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()*@
+
+<div id="divAddCustomer" style="display:block;">
+    @{
+        Html.RenderPartial("_Customers", Model.Customers);
+    }
+</div>
+ @*}*@ 
+
+
+<div id="divAddOffers" style="display:none;">
+    @{
+        Html.RenderPartial("_Subscriptions", Model.Catalog);
+    }
+</div>
+
+
+<script>
+    $('#btnCreate').click(function (e) {
+    
+        var resell = $('#IndirectResellerID :selected').val();
+        if (resell == '') {
+            alert("Select indirect reseller.");
+            $('#IndirectResellerID').focus();
+            e.preventDefault();
+            return;
+        }
+
+        //e.preventDefault();
+        if ($('#errMsg').text() == "available") {
+
+        }
+        else {
+            $('#DomainName').focus();
+            e.preventDefault();
+            return;
+        }
+    
+    });
+   
+    $('#btnSubscription').click(function (e) {
+
+        //validate
+        e.preventDefault();
+
+        var cus = new Object();
+        cus.CompanyName = $('#CompanyName').val();
+        cus.DomainName = $('#DomainName').val();
+        cus.AddressLine1 = $('#AddressLine1').val();
+        cus.City = $('#City').val();
+        cus.ZipPostal = $('#ZipPostal').val();
+
+        cus.FirstName = $('#FirstName').val();
+        cus.LastName = $('#LastName').val();
+        cus.EmailAddress = $('#EmailAddress').val();
+
+
+        var err = Validate(cus);
+        if (err != "") {
+            $('#btnCreate').click();
+            return;
+        }
+
+
+        var resell = $('#IndirectResellerID :selected').val();
+        if (resell == '') {
+            alert("Select indirect reseller.");
+            $('#IndirectResellerID').focus();
+            return;
+        }
+
+
+
+
+        var spec = $('#SpecialQualificationsID :selected').text();
+        //$('#lblSpecs').text(spec);
+        //alert(spec);
+        if (spec == "None") {
+            $('#Education-liRole').attr("style", "display:none;")
+        }
+        else {
+            $('#Education-liRole').attr("style", "display:block;")
+        }
+
+        //e.preventDefault();
+        if ($('#errMsg').text() == "available") {
+            $('#divAddOffers').attr("style", "display:block;");
+            $('#divAddCustomer').attr("style", "display:none;");
+            $('#btnSubmit').focus();
+        }
+        else {
+            $('#DomainName').focus();
+            return;
+        }
+    });
+
+
+    function Validate(cus) {
+        var err = "";
+        if (cus.CompanyName == "") {
+            err = "Company name is required.";
+        }
+        else if (cus.DomainName == "") {
+            err = "Domain name is required.";
+        }
+        else if (cus.AddressLine1 == "") {
+            err = "Address line 1 is required.";
+        }
+        else if (cus.City == "") {
+            err = "City is required.";
+        }
+        else if (cus.ZipPostal == "") {
+            err = "Zip/Postal Code is required.";
+        }
+        else if (cus.FirstName == "") {
+            err = "First name is required.";
+        }
+        else if (cus.LastName == "") {
+            err = "Last name is required.";
+        }
+        else if (cus.EmailAddress == "") {
+            err = "Email is required.";
+        } 
+
+        return err;
+    }
+
+</script>
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        //sidebar highlight
+        $('#side-menu li:nth-child(3) a').addClass("active");
+
+    });
+
+</script>

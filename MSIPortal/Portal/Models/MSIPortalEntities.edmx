@@ -1,0 +1,1453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MSIPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AuditTrails">
+          <Key>
+            <PropertyRef Name="AuditID" />
+          </Key>
+          <Property Name="AuditID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Module" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaskDesc" Type="nvarchar(max)" />
+          <Property Name="AuditDate" Type="datetime" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>
+        <EntityType Name="AuthorizedRepresentatives">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContactNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MicrosoftID" Type="nvarchar" MaxLength="100" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="DomainName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine1" Type="nvarchar(max)" />
+          <Property Name="AddressLine2" Type="nvarchar(max)" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="ZipPostal" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" />
+          <Property Name="SpecialQualificationsID" Type="int" Nullable="false" />
+          <Property Name="IndirectResellerID" Type="int" />
+          <Property Name="AddedBy" Type="int" />
+          <Property Name="AgreementDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgreedToMCA" Type="bit" />
+          <Property Name="Username" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="EmailTemplates">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailType" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailSubject" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailContent" Type="nvarchar(max)" />
+          <Property Name="EmailVariables" Type="nvarchar(max)" />
+          <Property Name="DetailsContent" Type="nvarchar(max)" />
+          <Property Name="DetailsVariables" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ErrorLogs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReferenceID" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Error" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Modules1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Offers">
+          <Key>
+            <PropertyRef Name="OffersID" />
+          </Key>
+          <Property Name="OffersID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SalesGroupId" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="DealersPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="IsSent" Type="bit" Nullable="false" />
+          <Property Name="Billing" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitType" Type="nvarchar" MaxLength="50" />
+          <Property Name="MinimumQuantity" Type="int" />
+          <Property Name="BillingCycle" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrdersID" Type="int" />
+          <Property Name="LineItemNumber" Type="int" />
+          <Property Name="OffersID" Type="nvarchar" MaxLength="100" />
+          <Property Name="SubscriptionID" Type="nvarchar" MaxLength="100" />
+          <Property Name="FriendlyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="PartnerIdOnRecord" Type="nvarchar" MaxLength="100" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrdersID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CustomersID" Type="int" />
+          <Property Name="MicrosoftID" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="BillingCycle" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderStatus" Type="nvarchar(max)" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalVat" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ResellerID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Resellers">
+          <Key>
+            <PropertyRef Name="ResellerID" />
+          </Key>
+          <Property Name="ResellerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MPNID" Type="int" />
+          <Property Name="IsVatExempted" Type="bit" Nullable="false" />
+          <Property Name="ResellerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Emails" Type="nvarchar(max)" />
+          <Property Name="UsersID" Type="int" />
+          <Property Name="ResellerStatus" Type="int" Nullable="false" />
+          <Property Name="IsApprove" Type="bit" Nullable="false" />
+          <Property Name="UserTypeID" Type="int" />
+          <Property Name="AuthorizedRepresentative" Type="int" />
+          <Property Name="IsAllowedToEdit" Type="bit" Nullable="false" />
+          <Property Name="DateRegistered" Type="datetime" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ApprovedBy" Type="int" />
+          <Property Name="SellerID" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SpecialQualifications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Subscriptions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="SubscriptionID" Type="nvarchar" MaxLength="100" />
+          <Property Name="OffersId" Type="nvarchar" MaxLength="100" />
+          <Property Name="OfferName" Type="nvarchar(max)" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="EffectiveStartDate" Type="datetime" />
+          <Property Name="CommitmentEndDate" Type="datetime" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillingCycle" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderId" Type="nvarchar" MaxLength="100" />
+          <Property Name="PartnerId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TermsAndConditions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TermsAndConditions" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TicketID" Type="int" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="EditedBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="TicketDate" Type="datetime" />
+          <Property Name="TicketSenderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryID" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusText" Type="nvarchar(max)" />
+          <Property Name="Details" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserAccessDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ModuleID" Type="int" />
+          <Property Name="TaggedID" Type="nvarchar" MaxLength="150" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="UserAccesses1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserTypeID" Type="int" />
+          <Property Name="ModuleID" Type="int" />
+          <Property Name="CanView" Type="bit" />
+          <Property Name="CanEdit" Type="bit" />
+          <Property Name="CanDelete" Type="bit" />
+          <Property Name="CanDecide" Type="bit" />
+        </EntityType>
+        <EntityType Name="UserAccessHeader">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="UserTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AuditTrails_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="AuditTrails" Type="Self.AuditTrails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuditTrails">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_AddedBy">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_SpecialQualifications">
+          <End Role="SpecialQualifications" Type="Self.SpecialQualifications" Multiplicity="1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecialQualifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="SpecialQualificationsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Offers">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="0..1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="OffersID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OffersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrdersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resellers_approvedby">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Resellers" Type="Self.Resellers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Resellers">
+              <PropertyRef Name="ApprovedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resellers_UserTypes">
+          <End Role="UserTypes" Type="Self.UserTypes" Multiplicity="0..1" />
+          <End Role="Resellers" Type="Self.Resellers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resellers">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Subscriptions" Type="Self.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Offers">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="0..1" />
+          <End Role="Subscriptions" Type="Self.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="OffersID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="OffersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_EditedBy1">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="TicketDetails" Type="Self.TicketDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TicketDetails">
+              <PropertyRef Name="EditedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_TicketID">
+          <End Role="Tickets" Type="Self.Tickets" Multiplicity="1" />
+          <End Role="TicketDetails" Type="Self.TicketDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="TicketDetails">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccessDetails_UserAccessHeader">
+          <End Role="UserAccessHeader" Type="Self.UserAccessHeader" Multiplicity="0..1" />
+          <End Role="UserAccessDetails" Type="Self.UserAccessDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccessHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccessDetails">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccesses_Modules">
+          <End Role="Modules1" Type="Self.Modules1" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserAccesses1" Type="Self.UserAccesses1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Modules1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccesses1">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccesses_UserType">
+          <End Role="UserTypes" Type="Self.UserTypes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserAccesses1" Type="Self.UserAccesses1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserAccesses1">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccessHeader_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="UserAccessHeader" Type="Self.UserAccessHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccessHeader">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_UserTypes">
+          <End Role="UserTypes" Type="Self.UserTypes" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MSIPortalModelStoreContainer">
+          <EntitySet Name="AuditTrails" EntityType="Self.AuditTrails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuthorizedRepresentatives" EntityType="Self.AuthorizedRepresentatives" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailTemplates" EntityType="Self.EmailTemplates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrorLogs" EntityType="Self.ErrorLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Modules1" EntityType="Self.Modules1" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Resellers" EntityType="Self.Resellers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecialQualifications" EntityType="Self.SpecialQualifications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscriptions" EntityType="Self.Subscriptions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TermsAndConditions" EntityType="Self.TermsAndConditions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketDetails" EntityType="Self.TicketDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccessDetails" EntityType="Self.UserAccessDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccesses1" EntityType="Self.UserAccesses1" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccessHeader" EntityType="Self.UserAccessHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTypes" EntityType="Self.UserTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AuditTrails_Users" Association="Self.FK_AuditTrails_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AuditTrails" EntitySet="AuditTrails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_AddedBy" Association="Self.FK_Customers_AddedBy">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_SpecialQualifications" Association="Self.FK_Customers_SpecialQualifications">
+            <End Role="SpecialQualifications" EntitySet="SpecialQualifications" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Offers" Association="Self.FK_OrderItems_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resellers_approvedby" Association="Self.FK_Resellers_approvedby">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Resellers" EntitySet="Resellers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resellers_UserTypes" Association="Self.FK_Resellers_UserTypes">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="Resellers" EntitySet="Resellers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Customers" Association="Self.FK_Subscriptions_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Offers" Association="Self.FK_Subscriptions_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_EditedBy1" Association="Self.FK_Tickets_EditedBy1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="TicketDetails" EntitySet="TicketDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_TicketID" Association="Self.FK_Tickets_TicketID">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="TicketDetails" EntitySet="TicketDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccessDetails_UserAccessHeader" Association="Self.FK_UserAccessDetails_UserAccessHeader">
+            <End Role="UserAccessHeader" EntitySet="UserAccessHeader" />
+            <End Role="UserAccessDetails" EntitySet="UserAccessDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccesses_Modules" Association="Self.FK_UserAccesses_Modules">
+            <End Role="Modules1" EntitySet="Modules1" />
+            <End Role="UserAccesses1" EntitySet="UserAccesses1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccesses_UserType" Association="Self.FK_UserAccesses_UserType">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="UserAccesses1" EntitySet="UserAccesses1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccessHeader_Users" Association="Self.FK_UserAccessHeader_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserAccessHeader" EntitySet="UserAccessHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_UserTypes" Association="Self.FK_Users_UserTypes">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MSIPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AuditTrails">
+          <Key>
+            <PropertyRef Name="AuditID" />
+          </Key>
+          <Property Name="AuditID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Module" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaskDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuditDate" Type="DateTime" Precision="3" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_AuditTrails_Users" FromRole="AuditTrails" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="TicketID" />
+          </Key>
+          <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TicketDate" Type="DateTime" Precision="3" />
+          <Property Name="TicketSenderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TicketDetails" Relationship="MSIPortalModel.FK_Tickets_TicketID" FromRole="Tickets" ToRole="TicketDetails" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AuditTrails" Relationship="Self.FK_AuditTrails_Users" FromRole="Users" ToRole="AuditTrails" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypeID" Type="Int32" />
+          <NavigationProperty Name="UserAccessHeader" Relationship="MSIPortalModel.FK_UserAccessHeader_Users" FromRole="Users" ToRole="UserAccessHeader" />
+          <NavigationProperty Name="UserTypes" Relationship="MSIPortalModel.FK_Users_UserTypes" FromRole="Users" ToRole="UserTypes" />
+          <NavigationProperty Name="TicketDetails" Relationship="MSIPortalModel.FK_Tickets_EditedBy1" FromRole="Users" ToRole="TicketDetails" />
+          <NavigationProperty Name="Resellers" Relationship="MSIPortalModel.FK_Resellers_approvedby" FromRole="Users" ToRole="Resellers" />
+          <NavigationProperty Name="Customers" Relationship="MSIPortalModel.FK_Customers_AddedBy" FromRole="Users" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK_AuditTrails_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="AuditTrails" Type="Self.AuditTrails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuditTrails">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MSIPortalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuditTrails" EntityType="Self.AuditTrails" />
+          <EntitySet Name="Tickets" EntityType="Self.Tickets" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_AuditTrails_Users" Association="Self.FK_AuditTrails_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="AuditTrails" EntitySet="AuditTrails" />
+          </AssociationSet>
+          <EntitySet Name="AuthorizedRepresentatives" EntityType="MSIPortalModel.AuthorizedRepresentatives" />
+          <EntitySet Name="UserTypes" EntityType="MSIPortalModel.UserTypes" />
+          <EntitySet Name="ErrorLogs" EntityType="MSIPortalModel.ErrorLogs" />
+          <EntitySet Name="TermsAndConditions" EntityType="MSIPortalModel.TermsAndConditions" />
+          <EntitySet Name="Modules1" EntityType="MSIPortalModel.Modules1" />
+          <EntitySet Name="UserAccesses1" EntityType="MSIPortalModel.UserAccesses1" />
+          <AssociationSet Name="FK_UserAccesses_Modules2" Association="MSIPortalModel.FK_UserAccesses_Modules2">
+            <End Role="Modules1" EntitySet="Modules1" />
+            <End Role="UserAccesses1" EntitySet="UserAccesses1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccesses_UserType1" Association="MSIPortalModel.FK_UserAccesses_UserType1">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="UserAccesses1" EntitySet="UserAccesses1" />
+          </AssociationSet>
+          <EntitySet Name="Resellers" EntityType="MSIPortalModel.Resellers" />
+          <AssociationSet Name="FK_Resellers_UserTypes" Association="MSIPortalModel.FK_Resellers_UserTypes">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="Resellers" EntitySet="Resellers" />
+          </AssociationSet>
+          <EntitySet Name="OrderItems" EntityType="MSIPortalModel.OrderItems" />
+          <EntitySet Name="Subscriptions" EntityType="MSIPortalModel.Subscriptions" />
+          <EntitySet Name="UserAccessHeader" EntityType="MSIPortalModel.UserAccessHeader" />
+          <AssociationSet Name="FK_UserAccessHeader_Users" Association="MSIPortalModel.FK_UserAccessHeader_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserAccessHeader" EntitySet="UserAccessHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_UserTypes" Association="MSIPortalModel.FK_Users_UserTypes">
+            <End Role="UserTypes" EntitySet="UserTypes" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Offers" EntityType="MSIPortalModel.Offers" />
+          <AssociationSet Name="FK_OrderItems_Offers" Association="MSIPortalModel.FK_OrderItems_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Offers" Association="MSIPortalModel.FK_Subscriptions_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <EntitySet Name="UserAccessDetails" EntityType="MSIPortalModel.UserAccessDetails" />
+          <AssociationSet Name="FK_UserAccessDetails_UserAccessHeader" Association="MSIPortalModel.FK_UserAccessDetails_UserAccessHeader">
+            <End Role="UserAccessHeader" EntitySet="UserAccessHeader" />
+            <End Role="UserAccessDetails" EntitySet="UserAccessDetails" />
+          </AssociationSet>
+          <EntitySet Name="TicketDetails" EntityType="MSIPortalModel.TicketDetails" />
+          <AssociationSet Name="FK_Tickets_EditedBy1" Association="MSIPortalModel.FK_Tickets_EditedBy1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="TicketDetails" EntitySet="TicketDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tickets_TicketID" Association="MSIPortalModel.FK_Tickets_TicketID">
+            <End Role="Tickets" EntitySet="Tickets" />
+            <End Role="TicketDetails" EntitySet="TicketDetails" />
+          </AssociationSet>
+          <EntitySet Name="EmailTemplates" EntityType="MSIPortalModel.EmailTemplates" />
+          <AssociationSet Name="FK_Resellers_approvedby" Association="MSIPortalModel.FK_Resellers_approvedby">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Resellers" EntitySet="Resellers" />
+          </AssociationSet>
+          <EntitySet Name="Orders" EntityType="MSIPortalModel.Orders" />
+          <AssociationSet Name="FK_OrderItems_Orders" Association="MSIPortalModel.FK_OrderItems_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <EntitySet Name="Customers" EntityType="MSIPortalModel.Customers" />
+          <EntitySet Name="SpecialQualifications" EntityType="MSIPortalModel.SpecialQualifications" />
+          <AssociationSet Name="FK_Customers_AddedBy" Association="MSIPortalModel.FK_Customers_AddedBy">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customers_SpecialQualifications" Association="MSIPortalModel.FK_Customers_SpecialQualifications">
+            <End Role="SpecialQualifications" EntitySet="SpecialQualifications" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="MSIPortalModel.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Customers" Association="MSIPortalModel.FK_Subscriptions_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <EntitySet Name="Transactions" EntityType="MSIPortalModel.Transactions" />
+          </EntityContainer>
+        <EntityType Name="AuthorizedRepresentatives">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserAccesses1" Relationship="MSIPortalModel.FK_UserAccesses_UserType1" FromRole="UserTypes" ToRole="UserAccesses1" />
+          <NavigationProperty Name="Resellers" Relationship="MSIPortalModel.FK_Resellers_UserTypes" FromRole="UserTypes" ToRole="Resellers" />
+          <NavigationProperty Name="Users" Relationship="MSIPortalModel.FK_Users_UserTypes" FromRole="UserTypes" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="ErrorLogs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceID" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Error" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TermsAndConditions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TermsAndConditions1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Modules1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserAccesses1" Relationship="MSIPortalModel.FK_UserAccesses_Modules2" FromRole="Modules1" ToRole="UserAccesses1" />
+        </EntityType>
+        <EntityType Name="UserAccesses1">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserTypeID" Type="Int32" />
+          <Property Name="ModuleID" Type="Int32" />
+          <Property Name="CanView" Type="Boolean" />
+          <Property Name="CanEdit" Type="Boolean" />
+          <Property Name="CanDelete" Type="Boolean" />
+          <Property Name="CanDecide" Type="Boolean" />
+          <NavigationProperty Name="Modules1" Relationship="MSIPortalModel.FK_UserAccesses_Modules2" FromRole="UserAccesses1" ToRole="Modules1" />
+          <NavigationProperty Name="UserTypes" Relationship="MSIPortalModel.FK_UserAccesses_UserType1" FromRole="UserAccesses1" ToRole="UserTypes" />
+        </EntityType>
+        <Association Name="FK_UserAccesses_Modules2">
+          <End Type="MSIPortalModel.Modules1" Role="Modules1" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MSIPortalModel.UserAccesses1" Role="UserAccesses1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Modules1">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccesses1">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccesses_UserType1">
+          <End Type="MSIPortalModel.UserTypes" Role="UserTypes" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MSIPortalModel.UserAccesses1" Role="UserAccesses1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserAccesses1">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Resellers">
+          <Key>
+            <PropertyRef Name="ResellerID" />
+          </Key>
+          <Property Name="ResellerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MPNID" Type="Int32" />
+          <Property Name="IsVatExempted" Type="Boolean" Nullable="false" />
+          <Property Name="ResellerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Emails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UsersID" Type="Int32" />
+          <Property Name="ResellerStatus" Type="Int32" Nullable="false" />
+          <Property Name="IsApprove" Type="Boolean" Nullable="false" />
+          <Property Name="UserTypeID" Type="Int32" />
+          <Property Name="AuthorizedRepresentative" Type="Int32" />
+          <Property Name="IsAllowedToEdit" Type="Boolean" Nullable="false" />
+          <Property Name="DateRegistered" Type="DateTime" Precision="3" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserTypes" Relationship="MSIPortalModel.FK_Resellers_UserTypes" FromRole="Resellers" ToRole="UserTypes" />
+          <Property Name="ApprovedBy" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="MSIPortalModel.FK_Resellers_approvedby" FromRole="Resellers" ToRole="Users" />
+          <Property Name="SellerID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Resellers_UserTypes">
+          <End Type="MSIPortalModel.UserTypes" Role="UserTypes" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Resellers" Role="Resellers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resellers">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrdersID" Type="Int32" />
+          <Property Name="LineItemNumber" Type="Int32" />
+          <Property Name="OffersID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SubscriptionID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FriendlyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="PartnerIdOnRecord" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Offers" Relationship="MSIPortalModel.FK_OrderItems_Offers" FromRole="OrderItems" ToRole="Offers" />
+          <NavigationProperty Name="Orders" Relationship="MSIPortalModel.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Subscriptions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="SubscriptionID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OffersId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OfferName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="EffectiveStartDate" Type="DateTime" Precision="3" />
+          <Property Name="CommitmentEndDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Offers" Relationship="MSIPortalModel.FK_Subscriptions_Offers" FromRole="Subscriptions" ToRole="Offers" />
+          <NavigationProperty Name="Customers" Relationship="MSIPortalModel.FK_Subscriptions_Customers" FromRole="Subscriptions" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="UserAccessHeader">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="MSIPortalModel.FK_UserAccessHeader_Users" FromRole="UserAccessHeader" ToRole="Users" />
+          <NavigationProperty Name="UserAccessDetails" Relationship="MSIPortalModel.FK_UserAccessDetails_UserAccessHeader" FromRole="UserAccessHeader" ToRole="UserAccessDetails" />
+        </EntityType>
+        <Association Name="FK_UserAccessHeader_Users">
+          <End Type="MSIPortalModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.UserAccessHeader" Role="UserAccessHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccessHeader">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_UserTypes">
+          <End Type="MSIPortalModel.UserTypes" Role="UserTypes" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Users" Role="Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="UserTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Offers">
+          <Key>
+            <PropertyRef Name="OffersID" />
+          </Key>
+          <Property Name="OffersID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SalesGroupId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DealersPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="OrderItems" Relationship="MSIPortalModel.FK_OrderItems_Offers" FromRole="Offers" ToRole="OrderItems" />
+          <NavigationProperty Name="Subscriptions" Relationship="MSIPortalModel.FK_Subscriptions_Offers" FromRole="Offers" ToRole="Subscriptions" />
+          <Property Name="IsSent" Type="Boolean" Nullable="false" />
+          <Property Name="Billing" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MinimumQuantity" Type="Int32" />
+          <Property Name="BillingCycle" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_OrderItems_Offers">
+          <End Type="MSIPortalModel.Offers" Role="Offers" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.OrderItems" Role="OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="OffersID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OffersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Offers">
+          <End Type="MSIPortalModel.Offers" Role="Offers" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Subscriptions" Role="Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="OffersID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="OffersId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserAccessDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ModuleID" Type="Int32" />
+          <Property Name="TaggedID" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserAccessHeader" Relationship="MSIPortalModel.FK_UserAccessDetails_UserAccessHeader" FromRole="UserAccessDetails" ToRole="UserAccessHeader" />
+        </EntityType>
+        <Association Name="FK_UserAccessDetails_UserAccessHeader">
+          <End Type="MSIPortalModel.UserAccessHeader" Role="UserAccessHeader" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.UserAccessDetails" Role="UserAccessDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccessHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserAccessDetails">
+              <PropertyRef Name="ModuleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TicketDetails">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TicketID" Type="Int32" Nullable="false" />
+          <Property Name="Remarks" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EditedBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="MSIPortalModel.FK_Tickets_EditedBy1" FromRole="TicketDetails" ToRole="Users" />
+          <NavigationProperty Name="Tickets" Relationship="MSIPortalModel.FK_Tickets_TicketID" FromRole="TicketDetails" ToRole="Tickets" />
+        </EntityType>
+        <Association Name="FK_Tickets_EditedBy1">
+          <End Type="MSIPortalModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MSIPortalModel.TicketDetails" Role="TicketDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TicketDetails">
+              <PropertyRef Name="EditedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tickets_TicketID">
+          <End Type="MSIPortalModel.Tickets" Role="Tickets" Multiplicity="1" />
+          <End Type="MSIPortalModel.TicketDetails" Role="TicketDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tickets">
+              <PropertyRef Name="TicketID" />
+            </Principal>
+            <Dependent Role="TicketDetails">
+              <PropertyRef Name="TicketID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EmailTemplates">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EmailSubject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailVariables" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DetailsContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DetailsVariables" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Resellers_approvedby">
+          <End Type="MSIPortalModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Resellers" Role="Resellers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Resellers">
+              <PropertyRef Name="ApprovedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrdersID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomersID" Type="Int32" />
+          <Property Name="MicrosoftID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalVat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ResellerID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderItems" Relationship="MSIPortalModel.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <NavigationProperty Name="Customers" Relationship="MSIPortalModel.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK_OrderItems_Orders">
+          <End Type="MSIPortalModel.Orders" Role="Orders" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.OrderItems" Role="OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrdersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MicrosoftID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DomainName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ZipPostal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SpecialQualificationsID" Type="Int32" Nullable="false" />
+          <Property Name="IndirectResellerID" Type="Int32" />
+          <Property Name="AddedBy" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="MSIPortalModel.FK_Customers_AddedBy" FromRole="Customers" ToRole="Users" />
+          <NavigationProperty Name="SpecialQualifications" Relationship="MSIPortalModel.FK_Customers_SpecialQualifications" FromRole="Customers" ToRole="SpecialQualifications" />
+          <NavigationProperty Name="Orders" Relationship="MSIPortalModel.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+          <NavigationProperty Name="Subscriptions" Relationship="MSIPortalModel.FK_Subscriptions_Customers" FromRole="Customers" ToRole="Subscriptions" />
+          <Property Name="AgreementDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AgreedToMCA" Type="Boolean" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SpecialQualifications">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customers" Relationship="MSIPortalModel.FK_Customers_SpecialQualifications" FromRole="SpecialQualifications" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK_Customers_AddedBy">
+          <End Type="MSIPortalModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Customers" Role="Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customers_SpecialQualifications">
+          <End Type="MSIPortalModel.SpecialQualifications" Role="SpecialQualifications" Multiplicity="1" />
+          <End Type="MSIPortalModel.Customers" Role="Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecialQualifications">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="SpecialQualificationsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Type="MSIPortalModel.Customers" Role="Customers" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Customers">
+          <End Type="MSIPortalModel.Customers" Role="Customers" Multiplicity="0..1" />
+          <End Type="MSIPortalModel.Subscriptions" Role="Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MSIPortalModelStoreContainer" CdmEntityContainer="MSIPortalEntities">
+          <EntitySetMapping Name="AuditTrails">
+            <EntityTypeMapping TypeName="MSIPortalModel.AuditTrails">
+              <MappingFragment StoreEntitySet="AuditTrails">
+                <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="TaskDesc" ColumnName="TaskDesc" />
+                <ScalarProperty Name="AuditDate" ColumnName="AuditDate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="MSIPortalModel.Tickets">
+              <MappingFragment StoreEntitySet="Tickets">
+                <ScalarProperty Name="TicketSenderID" ColumnName="TicketSenderID" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TicketDate" ColumnName="TicketDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MSIPortalModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuthorizedRepresentatives">
+            <EntityTypeMapping TypeName="MSIPortalModel.AuthorizedRepresentatives">
+              <MappingFragment StoreEntitySet="AuthorizedRepresentatives">
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypes">
+            <EntityTypeMapping TypeName="MSIPortalModel.UserTypes">
+              <MappingFragment StoreEntitySet="UserTypes">
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLogs">
+            <EntityTypeMapping TypeName="MSIPortalModel.ErrorLogs">
+              <MappingFragment StoreEntitySet="ErrorLogs">
+                <ScalarProperty Name="Error" ColumnName="Error" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TermsAndConditions">
+            <EntityTypeMapping TypeName="MSIPortalModel.TermsAndConditions">
+              <MappingFragment StoreEntitySet="TermsAndConditions">
+                <ScalarProperty Name="TermsAndConditions1" ColumnName="TermsAndConditions" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Modules1">
+            <EntityTypeMapping TypeName="MSIPortalModel.Modules1">
+              <MappingFragment StoreEntitySet="Modules1">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccesses1">
+            <EntityTypeMapping TypeName="MSIPortalModel.UserAccesses1">
+              <MappingFragment StoreEntitySet="UserAccesses1">
+                <ScalarProperty Name="CanDecide" ColumnName="CanDecide" />
+                <ScalarProperty Name="CanDelete" ColumnName="CanDelete" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="CanView" ColumnName="CanView" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Resellers">
+            <EntityTypeMapping TypeName="MSIPortalModel.Resellers">
+              <MappingFragment StoreEntitySet="Resellers">
+                <ScalarProperty Name="SellerID" ColumnName="SellerID" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="DateRegistered" ColumnName="DateRegistered" />
+                <ScalarProperty Name="IsAllowedToEdit" ColumnName="IsAllowedToEdit" />
+                <ScalarProperty Name="AuthorizedRepresentative" ColumnName="AuthorizedRepresentative" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
+                <ScalarProperty Name="ResellerStatus" ColumnName="ResellerStatus" />
+                <ScalarProperty Name="UsersID" ColumnName="UsersID" />
+                <ScalarProperty Name="Emails" ColumnName="Emails" />
+                <ScalarProperty Name="ResellerName" ColumnName="ResellerName" />
+                <ScalarProperty Name="IsVatExempted" ColumnName="IsVatExempted" />
+                <ScalarProperty Name="MPNID" ColumnName="MPNID" />
+                <ScalarProperty Name="ResellerID" ColumnName="ResellerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="MSIPortalModel.OrderItems">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="PartnerIdOnRecord" ColumnName="PartnerIdOnRecord" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="FriendlyName" ColumnName="FriendlyName" />
+                <ScalarProperty Name="SubscriptionID" ColumnName="SubscriptionID" />
+                <ScalarProperty Name="OffersID" ColumnName="OffersID" />
+                <ScalarProperty Name="LineItemNumber" ColumnName="LineItemNumber" />
+                <ScalarProperty Name="OrdersID" ColumnName="OrdersID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions">
+            <EntityTypeMapping TypeName="MSIPortalModel.Subscriptions">
+              <MappingFragment StoreEntitySet="Subscriptions">
+                <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="BillingCycle" ColumnName="BillingCycle" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CommitmentEndDate" ColumnName="CommitmentEndDate" />
+                <ScalarProperty Name="EffectiveStartDate" ColumnName="EffectiveStartDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="OfferName" ColumnName="OfferName" />
+                <ScalarProperty Name="OffersId" ColumnName="OffersId" />
+                <ScalarProperty Name="SubscriptionID" ColumnName="SubscriptionID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccessHeader">
+            <EntityTypeMapping TypeName="MSIPortalModel.UserAccessHeader">
+              <MappingFragment StoreEntitySet="UserAccessHeader">
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="MSIPortalModel.Offers">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="BillingCycle" ColumnName="BillingCycle" />
+                <ScalarProperty Name="MinimumQuantity" ColumnName="MinimumQuantity" />
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+                <ScalarProperty Name="Billing" ColumnName="Billing" />
+                <ScalarProperty Name="IsSent" ColumnName="IsSent" />
+                <ScalarProperty Name="DealersPrice" ColumnName="DealersPrice" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SalesGroupId" ColumnName="SalesGroupId" />
+                <ScalarProperty Name="OffersID" ColumnName="OffersID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccessDetails">
+            <EntityTypeMapping TypeName="MSIPortalModel.UserAccessDetails">
+              <MappingFragment StoreEntitySet="UserAccessDetails">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TaggedID" ColumnName="TaggedID" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketDetails">
+            <EntityTypeMapping TypeName="MSIPortalModel.TicketDetails">
+              <MappingFragment StoreEntitySet="TicketDetails">
+                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="TicketID" ColumnName="TicketID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailTemplates">
+            <EntityTypeMapping TypeName="MSIPortalModel.EmailTemplates">
+              <MappingFragment StoreEntitySet="EmailTemplates">
+                <ScalarProperty Name="DetailsVariables" ColumnName="DetailsVariables" />
+                <ScalarProperty Name="DetailsContent" ColumnName="DetailsContent" />
+                <ScalarProperty Name="EmailVariables" ColumnName="EmailVariables" />
+                <ScalarProperty Name="EmailSubject" ColumnName="EmailSubject" />
+                <ScalarProperty Name="EmailContent" ColumnName="EmailContent" />
+                <ScalarProperty Name="EmailType" ColumnName="EmailType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="MSIPortalModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="ResellerID" ColumnName="ResellerID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="TotalVat" ColumnName="TotalVat" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="BillingCycle" ColumnName="BillingCycle" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="MicrosoftID" ColumnName="MicrosoftID" />
+                <ScalarProperty Name="CustomersID" ColumnName="CustomersID" />
+                <ScalarProperty Name="OrdersID" ColumnName="OrdersID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="MSIPortalModel.Customers">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="AgreedToMCA" ColumnName="AgreedToMCA" />
+                <ScalarProperty Name="AgreementDate" ColumnName="AgreementDate" />
+                <ScalarProperty Name="AddedBy" ColumnName="AddedBy" />
+                <ScalarProperty Name="IndirectResellerID" ColumnName="IndirectResellerID" />
+                <ScalarProperty Name="SpecialQualificationsID" ColumnName="SpecialQualificationsID" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ZipPostal" ColumnName="ZipPostal" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="DomainName" ColumnName="DomainName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="MicrosoftID" ColumnName="MicrosoftID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialQualifications">
+            <EntityTypeMapping TypeName="MSIPortalModel.SpecialQualifications">
+              <MappingFragment StoreEntitySet="SpecialQualifications">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="MSIPortalModel.Transactions">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="StatusText" ColumnName="StatusText" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="TransactionNo" ColumnName="TransactionNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

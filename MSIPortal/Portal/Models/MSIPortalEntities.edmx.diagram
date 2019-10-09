@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b772fa8681604ffaaf8da61bd49e0bb2" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="MSIPortalModel.AuditTrails" Width="1.5" PointX="3" PointY="14.625" />
+        <EntityTypeShape EntityType="MSIPortalModel.AuthorizedRepresentatives" Width="1.5" PointX="0.75" PointY="10.5" />
+        <EntityTypeShape EntityType="MSIPortalModel.ErrorLogs" Width="1.5" PointX="5.75" PointY="2.5" />
+        <EntityTypeShape EntityType="MSIPortalModel.Modules1" Width="1.5" PointX="9.75" PointY="2.875" />
+        <EntityTypeShape EntityType="MSIPortalModel.Offers" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="MSIPortalModel.OrderItems" Width="1.5" PointX="7.5" PointY="10.125" />
+        <EntityTypeShape EntityType="MSIPortalModel.Resellers" Width="1.5" PointX="12" PointY="8.125" />
+        <EntityTypeShape EntityType="MSIPortalModel.Subscriptions" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="MSIPortalModel.TermsAndConditions" Width="1.5" PointX="5.75" PointY="14.5" />
+        <EntityTypeShape EntityType="MSIPortalModel.Tickets" Width="1.5" PointX="12" PointY="12.875" />
+        <EntityTypeShape EntityType="MSIPortalModel.UserAccesses1" Width="1.5" PointX="12" PointY="4.25" />
+        <EntityTypeShape EntityType="MSIPortalModel.Users" Width="1.5" PointX="0.75" PointY="14.75" />
+        <EntityTypeShape EntityType="MSIPortalModel.UserTypes" Width="1.5" PointX="9.75" PointY="5.75" />
+        <AssociationConnector Association="MSIPortalModel.FK_AuditTrails_Users" />
+        <AssociationConnector Association="MSIPortalModel.FK_UserAccesses_Modules" />
+        <AssociationConnector Association="MSIPortalModel.FK_Subscriptions_Offers" />
+        <AssociationConnector Association="MSIPortalModel.FK_Resellers_UserTypes" />
+        <AssociationConnector Association="MSIPortalModel.FK_UserAccesses_UserType" />
+        <AssociationConnector Association="MSIPortalModel.FK_OrderItems_Offers" />
+        <AssociationConnector Association="MSIPortalModel.FK_Users_UserTypes" ManuallyRouted="true" >
+          <ConnectorPoint PointX="10.093747999999998" PointY="7.7302864583333326" />
+          <ConnectorPoint PointX="10.093747999999998" PointY="17.148648647135413" />
+          <ConnectorPoint PointX="7.802083333333333" PointY="17.148648647135413" />
+          <ConnectorPoint PointX="7.635416666666667" PointY="17.148648647135413" />
+          <ConnectorPoint PointX="2.25" PointY="17.148648647135413" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MSIPortalModel.UserAccessDetails" Width="1.5" PointX="5.25" PointY="18.375" />
+        <EntityTypeShape EntityType="MSIPortalModel.UserAccessHeader" Width="1.5" PointX="3" PointY="18.375" />
+        <AssociationConnector Association="MSIPortalModel.FK_UserAccessDetails_UserAccessHeader" />
+        <AssociationConnector Association="MSIPortalModel.FK_UserAccessHeader_Users" />
+        <EntityTypeShape EntityType="MSIPortalModel.TicketDetails" Width="1.5" PointX="14.25" PointY="14.25" />
+        <AssociationConnector Association="MSIPortalModel.FK_Tickets_EditedBy1" ManuallyRouted="true" >
+          <ConnectorPoint PointX="1.5" PointY="14.75" />
+          <ConnectorPoint PointX="1.5" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="7.635416666666667" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="7.802083333333333" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="9.1979166666666661" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="9.3645833333333339" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="10.010414666666664" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="10.177081333333332" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="11.416666666666666" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="11.583333333333334" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="11.75" PointY="13.59155343676499" />
+          <ConnectorPoint PointX="11.75" PointY="15.958638822916667" />
+          <ConnectorPoint PointX="14.25" PointY="15.958638822916667" />
+        </AssociationConnector>
+        <AssociationConnector Association="MSIPortalModel.FK_Tickets_TicketID" />
+        <EntityTypeShape EntityType="MSIPortalModel.EmailTemplates" Width="1.5" PointX="12.375" PointY="0.75" />
+        <AssociationConnector Association="MSIPortalModel.FK_Resellers_approvedby" ManuallyRouted="true" >
+          <ConnectorPoint PointX="2.25" PointY="16.461221296223957" />
+          <ConnectorPoint PointX="2.602722283110722" PointY="16.461221296223957" />
+          <ConnectorPoint PointX="2.602722283110722" PointY="13.84375" />
+          <ConnectorPoint PointX="7.635416666666667" PointY="13.84375" />
+          <ConnectorPoint PointX="7.802083333333333" PointY="13.84375" />
+          <ConnectorPoint PointX="9.1979166666666661" PointY="13.84375" />
+          <ConnectorPoint PointX="9.3645833333333339" PointY="13.84375" />
+          <ConnectorPoint PointX="10.010414666666664" PointY="13.84375" />
+          <ConnectorPoint PointX="10.177081333333332" PointY="13.84375" />
+          <ConnectorPoint PointX="11.5" PointY="13.84375" />
+          <ConnectorPoint PointX="11.5" PointY="12.625" />
+          <ConnectorPoint PointX="12.75" PointY="12.625" />
+          <ConnectorPoint PointX="12.75" PointY="12.412903645833334" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MSIPortalModel.Orders" Width="1.5" PointX="5.25" PointY="21.125" />
+        <AssociationConnector Association="MSIPortalModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="MSIPortalModel.Customers" Width="1.5" PointX="8" PointY="14.125" />
+        <EntityTypeShape EntityType="MSIPortalModel.SpecialQualifications" Width="1.5" PointX="5.75" PointY="25.75" />
+        <AssociationConnector Association="MSIPortalModel.FK_Customers_AddedBy" />
+        <AssociationConnector Association="MSIPortalModel.FK_Customers_SpecialQualifications" />
+        <AssociationConnector Association="MSIPortalModel.FK_Orders_Customers" />
+        <AssociationConnector Association="MSIPortalModel.FK_Subscriptions_Customers" />
+        <EntityTypeShape EntityType="MSIPortalModel.Transactions" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="MSIPortalModel.AzureUsage" Width="1.5" PointX="3.375" PointY="9.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
